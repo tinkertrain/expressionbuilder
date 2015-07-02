@@ -436,27 +436,51 @@ body {
 }
 .Canvas {
   background-color: lightsteelblue;
+  background-image: radial-gradient(
+    circle at center center,
+    lighten(lightslategray, 35%) 85%,
+    lighten(lightslategray, 25%) 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 2px;
   box-shadow: 0 0 1px rgba(darken(lightslategray, 10%), 0.25);
   width: 90%;
-  height: 200px;
+  min-height: 70px;
   padding: 10px;
   margin: 20px auto;
+  text-align: center;
 }
-.Canvas--canDrop--isOver {
+.Canvas.canDrop-isOver {
   background-color: palegreen;
+  background-image: radial-gradient(
+    circle at center center,
+    lighten(palegreen, 0) 85%,
+    darken(palegreen, 5%) 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
-.Canvas--cantDrop--isOver {
+.Canvas.cantDrop-isOver {
   background-color: indianred;
+  background-image: radial-gradient(
+    circle at center center,
+    lighten(indianred, 0) 85%,
+    darken(indianred, 5%) 100%);
+  background-repeat: no-repeat;
 }
 .Expression {
   text-align: center;
-  background-color: rgba(darken(lightsteelblue, 25%), 0.25);
-  box-shadow: 1px 1px 0 darken(lightsteelblue, 28%);
-  padding: 5px 5px 5px 7px;
+  background-color: rgba(darken(lightsteelblue, 0), 1);
+  box-shadow: 1px 1px 0 darken(lightsteelblue, 25%);
+  padding: 10px 20px 10px 7px;
+  position: relative;
+  border-radius: 2px;
   .Expression,
   .Clause {
+    background-color: rgba(darken(lightsteelblue, 28%), 0.25);
     display: inline-block;
     vertical-align: middle;
+    margin-bottom: 10px;
+    margin-top: 5px;
   }
 }
 .Expression.highlight,
@@ -477,9 +501,9 @@ body {
   font-weight: normal;
 }
 .Expression-RemoverWrapper {
-  vertical-align: top;
-  display: inline-block;
-  margin-left: 5px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
   line-height: 0;
 }
 .Expression-Remover {
@@ -493,7 +517,7 @@ body {
   color: white;
   padding: 0;
   margin: 0;
-
+  border-radius: 2px;
   &:hover {
     background-color: darken(indianred, 10%);
   }
@@ -512,15 +536,15 @@ body {
 .Placeholder.noDrop {
   background-color: indianred;
 }
-
 .Clause {
   display: inline-block;
   vertical-align: middle;
   text-align: center;
   position: relative;
-  padding: 5px 5px 5px 7px;
-  background-color: rgba(darken(lightseagreen, 0%), 1);
-  box-shadow: 1px 1px 0 darken(lightseagreen, 18%);
+  padding: 10px 20px 10px 7px;
+  border-radius: 2px;
+  background-color: lighten(desaturate(lightseagreen, 35%), 30%);
+  box-shadow: 1px 1px 0 darken(lightsteelblue, 25%);
 }
 .Clause-FacetForm {
   display: inline-block;
@@ -552,6 +576,12 @@ body {
   display: inline-block;
   vertical-align: middle;
   background-color: lightseagreen;
+  background-image: radial-gradient(
+    circle at center center,
+    lighten(lightseagreen, 0%) 50%,
+    darken(lightseagreen, 3%) 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
   height: 30px;
   line-height: 30px;
   width: 30px;
@@ -567,6 +597,8 @@ body {
   line-height: 30px;
   font-size: 12px;
   background-color: papayawhip;
+  cursor: pointer;
+  border-radius: 2px 0 0 2px;
 }
 .Clause-Value {
   display: inline-block;
@@ -576,6 +608,8 @@ body {
   line-height: 30px;
   background-color: papayawhip;
   font-size: 12px;
+  border-radius: 0 2px 2px 0;
+  cursor: pointer;
 }
 .Clause-Operator-List {
   display: none;
@@ -583,19 +617,31 @@ body {
 .Clause-Operator-List.show {
   display: block;
   position: absolute;
-  background-color: moccasin;
   list-style: none;
   padding: 0;
   width: 30px;
-  top: 22px;
+  top: 27px;
   left: 77px;
-
+  z-index: 100;
   li {
-    border-bottom: 1px solid darken(moccasin, 10%);
+    border-bottom: 1px solid darken(lightseagreen, 0%);
     font-family: monospace;
     cursor: pointer;
+    background-color: lighten(lightseagreen, 15%);
+    background-image: radial-gradient(
+      circle at center center,
+      lighten(lightseagreen, 30%) 50%,
+      lighten(lightseagreen, 15%) 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
     &:hover {
-      background-color: darken(moccasin, 10%);
+      background-color: lighten(lightseagreen, 5%);
+      background-image: radial-gradient(
+        circle at center center,
+        lighten(lightseagreen, 20%) 50%,
+        lighten(lightseagreen, 5%) 100%);
+      background-repeat: no-repeat;
+      background-size: cover;
     }
     &:last-child {
       border-bottom: 0;
@@ -608,9 +654,13 @@ body {
   padding: 10px;
   margin: 20px auto;
   text-align: center;
+  border-radius: 2px;
   h2 {
     color: #cdd3de;
-    text-shadow: 2px 2px 0px #333;
+    font-family: Futura, sans-serif;
+    font-weight: normal;
+
+    text-shadow: 1px 1px 0px #333;
   }
   pre {
     background-color: #333333;
@@ -621,19 +671,25 @@ body {
 }
 .Toolbar {
   width: 90%;
-  // height: 55px;
   background-color: darken(lightslategray, 37%);
   padding: 10px;
-  margin: 20px auto;
+  margin: 0 auto 20px;
   overflow: hidden;
   border: 1px solid darken(lightslategray, 40%);
-  box-shadow: 0 0 1px rgba(darken(lightslategray, 40%), 0.25);
+  box-shadow: inset 0 0 2px rgba(darken(lightslategray, 40%), 0.25);
   border-radius: 2px;
 }
 .OperatorTool {
   width: auto;
   border-radius: 8px;
   background-color: darken(lightslategray, 30%);
+  background-image: radial-gradient(
+    ellipse at 15px 13px,
+    darken(lightslategray, 28%) 24%,
+    darken(lightslategray, 34%) 100%);
+
+  background-repeat: no-repeat;
+  background-size: cover;
   margin-right: 10px;
   display: inline-block;
   vertical-align: middle;
@@ -641,8 +697,8 @@ body {
   font-family: 'Source Code Pro', monospace;
   font-size: 12px;
   padding: 5px 10px;
-  box-shadow: inset 1px 1px 0 darken(lightslategray, 0%),
-              1px 1px 0 darken(lightslategray, 45%);
+  box-shadow: inset 1px 1px 1px darken(lightslategray, 3%),
+              1px 1px 1px darken(lightslategray, 45%);
   cursor: move;
 }
 .OperatorTool-icon {
@@ -668,6 +724,15 @@ body {
   border-radius: 3px;
   padding: 0 10px;
   background-color: darken(mediumturquoise, 35%);
+  border-radius: 8px;
+  background-color: darken(mediumturquoise, 35%);
+  background-image: radial-gradient(
+    ellipse at 15px 13px,
+    darken(mediumturquoise, 32%) 24%,
+    darken(mediumturquoise, 38%) 100%);
+
+  background-repeat: no-repeat;
+  background-size: cover;
   margin-right: 5px;
   display: inline-block;
   vertical-align: middle;
@@ -675,7 +740,11 @@ body {
   color: lighten(lightsteelblue, 10%);
   font-family: 'Source Code Pro', monospace;
   font-size: 12px;
-  box-shadow: inset 1px 1px 0 darken(mediumturquoise, 20%),
-              1px 1px 0 darken(mediumturquoise, 40%);
+  box-shadow: inset 1px 1px 1px darken(mediumturquoise, 20%),
+              1px 1px 1px darken(mediumturquoise, 40%);
   float: right;
+}
+#QLogo {
+  display: block;
+  margin: 20px auto;
 }
