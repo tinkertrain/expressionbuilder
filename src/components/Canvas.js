@@ -3,6 +3,8 @@ import React, { PropTypes } from 'react';
 import { DropTarget } from 'react-dnd';
 import DnDTypes from '../constants/DnDTypes';
 import classNames from 'classnames';
+
+import Clause from './expression/Clause';
 import Expression from './expression/Expression';
 
 let canvasTarget = {
@@ -12,7 +14,7 @@ let canvasTarget = {
   canDrop(props, monitor) {
     let item = monitor.getItem();
 
-    return props.canvas.length === 0 && item.type === 'operator';
+    return props.canvas.length === 0 && (item.type === 'operator' || item.type === 'clause');
   }
 };
 
@@ -22,25 +24,26 @@ let canvasTarget = {
   canDrop: monitor.canDrop()
 }))
 export default class Canvas {
-  setBGColour() {
-    if (this.props.canDrop && this.props.isOver) {
-      return 'palegreen';
-    }
-    if (!this.props.canDrop && this.props.isOver) {
-      return 'indianred';
-    }
-    return 'lightsteelblue';
-  }
-
   render() {
     const { canvas, addExpression } = this.props;
-    const { connectDropTarget, isOver, canDrop } = this.props;
+    const { connectDropTarget, isOver, canDrop, setClauseOperator, setClauseFacet, setClauseValue, removeExpression } = this.props;
 
     let root = R.filter(R.propEq('id', 0))(canvas);
     let RootExpression;
 
     if (root) {
       RootExpression = root.map(function createRoot(exp) {
+        if (exp.type === 'clause') {
+          return (
+            <Clause
+            key="1"
+            removeExpression = { removeExpression }
+            setClauseFacet = { setClauseFacet }
+            setClauseOperator = { setClauseOperator }
+            setClauseValue = { setClauseValue }
+            expression = { exp } />
+          );
+        }
         return (
           <Expression
           id = { exp.id }
@@ -57,8 +60,8 @@ export default class Canvas {
       <div
       className={classNames({
         Canvas: true,
-        'Canvas--canDrop--isOver': this.props.canDrop && this.props.isOver,
-        'Canvas--cantDrop--isOver': !this.props.canDrop && this.props.isOver
+        'canDrop-isOver': canDrop && isOver,
+        'cantDrop-isOver': !canDrop && isOver
       })} >
         { RootExpression }
       </div>
