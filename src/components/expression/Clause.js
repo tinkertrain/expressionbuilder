@@ -49,7 +49,7 @@ export default class Clause extends Component {
 }
 
 Clause.propTypes = {
-  expression: PropTypes.string.isRequired,
+  expression: PropTypes.object.isRequired,
   setClauseFacet: PropTypes.func,
   setClauseOperator: PropTypes.func,
   setClauseValue: PropTypes.func,

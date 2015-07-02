@@ -23,7 +23,7 @@ let placeholderTarget = {
 export default class Placeholder {
 
   render() {
-    const { side, expression } = this.props;
+    const { side } = this.props;
     const { connectDropTarget, isOver, canDrop } = this.props;
 
     return connectDropTarget(
@@ -39,7 +39,6 @@ export default class Placeholder {
 
 Placeholder.propTypes = {
   side: PropTypes.string.isRequired,
-  expression: PropTypes.object.isRequired,
   isOver: PropTypes.func,
   canDrop: PropTypes.func,
   connectDragSource: PropTypes.func
