@@ -10,8 +10,7 @@ export default class ClauseOperator extends Component {
       greaterThan: '>',
       greaterOrEqualTo: '>=',
       lowerThan: '<',
-      lowerOrEqualTo: '<=',
-      not: '!='
+      lowerOrEqualTo: '<='
     };
     let key = 1;
     let symbolList = R.values(
