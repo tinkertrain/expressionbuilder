@@ -1,23 +1,38 @@
-import React, { PropTypes } from 'react';
+import R from 'ramda';
+import React, { Component, PropTypes } from 'react';
 
-export default class Value {
+export default class Value extends Component {
   render() {
     const { expression } = this.props;
 
-    let value = expression.value ?
+    let value = expression.value && !this.state.editMode ?
       (
-        <div className="Clause-Value">{ expression.value }</div>
+        <div
+        className="Clause-Value"
+        onClick={this.editValue.bind(this)}>
+          { expression.value }
+        </div>
       ) :
       (
         <form className="Clause-ValueForm" onSubmit={ this.setValue.bind(this) }>
           <input
           placeholder="Value"
           ref="facetValue"
+          defaultValue={ expression.value || ''}
           onKeyDown={this.setValueFromTabKey.bind(this)} />
         </form>
       );
 
     return value;
+  }
+
+  state = { editMode: true }
+
+  componentDidUpdate() {
+    if (!R.isNil(this.refs.facetValue)) {
+      this.refs.facetValue.getDOMNode().select();
+      this.refs.facetValue.getDOMNode().focus();
+    }
   }
 
   setValueFromTabKey(e) {
@@ -27,6 +42,8 @@ export default class Value {
 
       expression.value = value;
       setClauseValue(expression);
+
+      this.setState({ editMode: false});
     }
   }
 
@@ -37,6 +54,12 @@ export default class Value {
 
     expression.value = value;
     setClauseValue(expression);
+
+    this.setState({ editMode: false});
+  }
+
+  editValue() {
+    this.setState({ editMode: true});
   }
 }
 

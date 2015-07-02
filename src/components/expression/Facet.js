@@ -1,19 +1,24 @@
 import R from 'ramda';
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-export default class Facet {
+export default class Facet extends Component {
   render() {
     const { expression } = this.props;
 
-    let facet = expression.facet ?
+    let facet = expression.facet && !this.state.editMode ?
       (
-        <div className="Clause-Facet">{ expression.facet }</div>
+        <div
+        className="Clause-Facet"
+        onClick={this.editFacet.bind(this)}>
+          { expression.facet }
+        </div>
       ) :
       (
         <form className="Clause-FacetForm" onSubmit={ this.setFacet.bind(this) }>
           <input
           placeholder="Facet"
           ref="facetName"
+          defaultValue={ expression.facet || ''}
           onKeyDown={this.setFacetFromTabKey.bind(this)} />
         </form>
       );
@@ -21,19 +26,30 @@ export default class Facet {
     return facet;
   }
 
+  state = { editMode: true }
+
   componentDidMount() {
     if (!R.isNil(this.refs.facetName)) {
       this.refs.facetName.getDOMNode().focus();
     }
   }
 
+  componentDidUpdate() {
+    if (!R.isNil(this.refs.facetName)) {
+      this.refs.facetName.getDOMNode().select();
+      this.refs.facetName.getDOMNode().focus();
+    }
+  }
+
   setFacetFromTabKey(e) {
-    if (e.keyCode == 9) {
+    if (e.keyCode === 9 || e.keyCode === '9') {
       const { expression, setClauseFacet } = this.props;
       let facet = React.findDOMNode(this.refs.facetName).value;
 
       expression.facet = facet;
       setClauseFacet(expression);
+
+      this.setState({ editMode: false});
     }
   }
 
@@ -44,6 +60,12 @@ export default class Facet {
 
     expression.facet = facet;
     setClauseFacet(expression);
+
+    this.setState({ editMode: false});
+  }
+
+  editFacet() {
+    this.setState({ editMode: true});
   }
 }
 
