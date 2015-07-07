@@ -12,12 +12,11 @@ import FuseExpression from '../components/FuseExpression';
 import FuseEndPoint from '../components/FuseEndPoint';
 
 @connect(state => ({
-  canvas: state.canvas,
-  fuse: state.fuse
+  builder: state.builder
 }))
 export default class Builder extends Component{
   render() {
-    const { dispatch, canvas, fuse } = this.props;
+    const { dispatch, builder } = this.props;
 
     return (
       <div>
@@ -27,28 +26,41 @@ export default class Builder extends Component{
         width="75"
         height="75" />
 
-        <FuseEndPoint
-        fuse = { fuse }
-        {...bindActionCreators(FuseActions, dispatch)} />
-
         <Toolbar />
 
         <Canvas
-        canvas = { canvas }
+        builder = { builder }
         {...bindActionCreators(CanvasActions, dispatch)} />
-
-        <FuseExpression
-        canvas = { canvas }
-        fuse = { fuse }
-        {...bindActionCreators(FuseActions, dispatch)} />
-
       </div>
     );
+    // return (
+    //   <div>
+    //     <Q
+    //     id="QLogo"
+    //     color="#191922"
+    //     width="75"
+    //     height="75" />
+
+    //     <FuseEndPoint
+    //     fuse = { fuse }
+    //     {...bindActionCreators(FuseActions, dispatch)} />
+
+
+    //     <Canvas
+    //     canvas = { canvas }
+    //     {...bindActionCreators(CanvasActions, dispatch)} />
+
+    //     <FuseExpression
+    //     canvas = { canvas }
+    //     fuse = { fuse }
+    //     {...bindActionCreators(FuseActions, dispatch)} />
+
+    //   </div>
+    // );
   }
 }
 
 Builder.propTypes = {
   dispatch: PropTypes.func,
-  canvas: PropTypes.array,
-  fuse: PropTypes.object
+  builder: PropTypes.object
 };

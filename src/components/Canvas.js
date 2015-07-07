@@ -1,4 +1,5 @@
 import R from 'ramda';
+import { Map, List } from 'immutable';
 import React, { PropTypes } from 'react';
 import { DropTarget } from 'react-dnd';
 import DnDTypes from '../constants/DnDTypes';
@@ -25,10 +26,41 @@ let canvasTarget = {
 }))
 export default class Canvas {
   render() {
-    const { canvas } = this.props;
+    const { builder } = this.props;
     const { connectDropTarget, isOver, canDrop, setClauseOperator, setClauseFacet, setClauseValue, removeExpression } = this.props;
+    const canvas = builder.canvas;
+    let root = canvas.filter((exp) => {
+      return exp.get('id') === 0;
+    });
+    let RootExpression;
 
-    let root = R.filter(R.propEq('id', 0))(canvas);
+    if (root.size > 0) {
+      RootExpression = root.map((exp) => {
+        if (exp.get('type') === 'clause') {
+          return (
+            <Clause
+            key="1"
+            removeExpression = { removeExpression }
+            setClauseFacet = { setClauseFacet }
+            setClauseOperator = { setClauseOperator }
+            setClauseValue = { setClauseValue }
+            expression = { exp } />
+          );
+        }
+        return (
+          <Expression
+          id = { exp.get('id') }
+          key = { exp.get('id') }
+          canvas = { canvas } />
+        );
+      });
+    }
+    else {
+      RootExpression = <div className="Canvas--empty">Drop some items!</div>;
+    }
+
+    console.log(root.size);
+    /*let root = R.filter(R.propEq('id', 0))(canvas);
     let RootExpression;
 
     if (root.length > 0) {
@@ -54,7 +86,7 @@ export default class Canvas {
     }
     else {
       RootExpression = <div className="Canvas--empty">Drop some items!</div>;
-    }
+    }*/
 
     return connectDropTarget(
       <div
@@ -70,7 +102,7 @@ export default class Canvas {
 }
 
 Canvas.propTypes = {
-  canvas: PropTypes.array.isRequired,
+  builder: PropTypes.object.isRequired,
   isOver: PropTypes.func,
   canDrop: PropTypes.func,
   connectDragSource: PropTypes.func

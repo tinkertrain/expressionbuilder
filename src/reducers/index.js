@@ -1,2 +1,1 @@
-export canvas from './canvas.js';
-export fuse from './fuse.js';
+export builder from './builder.js';

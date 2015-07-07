@@ -1,8 +1,14 @@
 import R from 'ramda';
+import { Map, List } from 'immutable';
 
 import { ADD_EXPRESSION, SET_CLAUSE_FACET, SET_CLAUSE_VALUE, SET_CLAUSE_OPERATOR, REMOVE_EXPRESSION } from '../constants/ActionTypes';
 
-export default function canvas(state = [], action) {
+let initialState = {
+  canvas: List(),
+  fuse: Map()
+};
+
+export default function builder(state = initialState, action) {
   switch (action.type) {
     case ADD_EXPRESSION:
       if (state.length !== 0) {
