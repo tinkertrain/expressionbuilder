@@ -662,11 +662,13 @@ body {
 
     text-shadow: 1px 1px 0px #333;
   }
-  pre {
-    background-color: #333333;
+  & > pre {
+    background-color: darken(lightslategray, 25%);
     font-size: 14px;
+    text-shadow: 1px 1px 0 darken(lightslategray, 40%);
     color: #cdd3de;
     padding: 20px 10px;
+    border: 1px solid darken(lightslategray, 27%);
   }
 }
 .Toolbar {
@@ -747,4 +749,117 @@ body {
 #QLogo {
   display: block;
   margin: 20px auto;
+}
+.FuseDial-Caller.FuseDial-Caller--clicked {
+  border-radius: 8px 8px 0 0;
+}
+.FuseDial-Caller {
+  border: 0;
+  border-radius: 8px;
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 10px;
+  background-color: darken(desaturate(lightseagreen, 20%), 10%);
+  background-image: radial-gradient(
+    ellipse at 15px 13px,
+    darken(desaturate(lightseagreen, 20%), 0%) 24%,
+    darken(desaturate(lightseagreen, 20%), 10%) 100%);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  color: lighten(lightsteelblue, 10%);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 14px;
+  box-shadow: inset 1px 1px 1px lighten(desaturate(lightseagreen, 20%), 5%),
+              1px 1px 1px darken(desaturate(lightseagreen, 20%), 20%);
+}
+.FuseDial-Response {
+  margin: 0 0 20px;
+  button {
+    border: 0;
+    width: 75px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 3px;
+    padding: 0 10px;
+    background-color: darken(lightseagreen, 30%);
+    background-image: radial-gradient(
+      ellipse at 15px 13px,
+      darken(lightseagreen, 16%) 24%,
+      darken(lightseagreen, 20%) 100%);
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-right: 0px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    color: lighten(lightsteelblue, 10%);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12px;
+    box-shadow: inset 1px 1px 1px darken(lightseagreen, 15%),
+                1px 1px 1px darken(lightseagreen, 30%);
+
+    &:first-child {
+      border-radius: 0 0 0 8px;
+    }
+    &:last-child {
+      border-radius: 0 0 8px 0;
+    }
+  }
+
+}
+.FuseDial-Items {
+  text-align: left;
+  min-height: 100px;
+  max-height: 300px;
+  background-color: #333333;
+  font-size: 12px;
+  color: #cdd3de;
+  padding: 20px 10px;
+}
+.FuseEndPoint {
+  margin-bottom: 40px;
+  text-align: center;
+  h3,
+  span,
+  label,
+  input {
+    display: inline-block;
+    vertical-align: middle;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+  }
+  h3,
+  label {
+    color: lighten(lightsteelblue, 5%);
+    background-color: darken(slategray, 25%);
+    font-size: 14px;
+  }
+  input {
+    border: 0;
+  }
+  h3 {
+    margin: 0;
+  }
+  span {
+    cursor: pointer;
+    border-left: 1px solid darken(slategray, 30%);
+    color: lighten(lightsteelblue, 5%);
+    background-color: darken(slategray, 25%);
+  }
+}
+.Canvas--empty {
+  color: rgba(slategray, 0.5);
+  margin-top: 15px;
+  font-size: 18px;
+}
+.FuseExpression-setEndPoint {
+  font-size: 11px;
+  color: darken(slategray, 35%);
 }

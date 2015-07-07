@@ -25,13 +25,13 @@ let canvasTarget = {
 }))
 export default class Canvas {
   render() {
-    const { canvas, addExpression } = this.props;
+    const { canvas } = this.props;
     const { connectDropTarget, isOver, canDrop, setClauseOperator, setClauseFacet, setClauseValue, removeExpression } = this.props;
 
     let root = R.filter(R.propEq('id', 0))(canvas);
     let RootExpression;
 
-    if (root) {
+    if (root.length > 0) {
       RootExpression = root.map(function createRoot(exp) {
         if (exp.type === 'clause') {
           return (
@@ -53,7 +53,7 @@ export default class Canvas {
       });
     }
     else {
-      RootExpression = 'nada';
+      RootExpression = <div className="Canvas--empty">Drop some items!</div>;
     }
 
     return connectDropTarget(
@@ -71,7 +71,6 @@ export default class Canvas {
 
 Canvas.propTypes = {
   canvas: PropTypes.array.isRequired,
-  addExpression: PropTypes.func.isRequired,
   isOver: PropTypes.func,
   canDrop: PropTypes.func,
   connectDragSource: PropTypes.func

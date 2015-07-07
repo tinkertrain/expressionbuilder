@@ -4,17 +4,30 @@ import React, { Component, PropTypes } from 'react';
 import { clauseOperators } from 'queryapi';
 import { queryOperators } from 'queryapi';
 
+import FuseDial from './FuseDial';
+
 export default class FuseExpression extends Component {
   render() {
-    const { canvas } = this.props;
-    let rootExpression;
+    const { canvas, fuse, dialFuse, getResults, saveExpression } = this.props;
+    let rootExpression = 'Incomplete';
+    let dial = '';
 
     if (canvas.length && this.isCanvasComplete(canvas)) {
       let prepared = this.prepareCanvas(R.clone(canvas));
       rootExpression = R.find(R.propEq('id', 0), prepared).resolved;
     }
-    else {
-      rootExpression = 'Incomplete';
+
+    if (rootExpression !== 'Incomplete' && !R.isNil(fuse.endPoint)) {
+      dial = (
+        <FuseDial
+        fuse = { fuse }
+        dialFuse = { dialFuse }
+        getResults = { getResults }
+        expression = { rootExpression } />
+      );
+    }
+    else if (rootExpression === 'Incomplete' && R.isNil(fuse.endPoint)) {
+      dial = <span className="FuseExpression-setEndPoint">Set a Fuse URL to see a response made with your expression</span>;
     }
 
     return (
@@ -23,6 +36,7 @@ export default class FuseExpression extends Component {
         <pre>
           { rootExpression }
         </pre>
+        { dial }
       </div>
     );
   }
@@ -78,10 +92,15 @@ export default class FuseExpression extends Component {
       return resolveUnresolved;
     }, expressionsGrouped);
   }
+
 }
 
 FuseExpression.propTypes = {
-  canvas: PropTypes.array
+  canvas: PropTypes.array.isRequired,
+  fuse: PropTypes.object.isRequired,
+  dialFuse: PropTypes.func,
+  saveExpression: PropTypes.func,
+  getResults: PropTypes.func
 };
 
 function traverseCanvas(myCanvas) {
