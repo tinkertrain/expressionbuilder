@@ -1,16 +1,16 @@
-import R from 'ramda';
+import { Map } from 'immutable';
 import React, { Component, PropTypes } from 'react';
 
 export default class Facet extends Component {
   render() {
     const { expression } = this.props;
 
-    let facet = expression.facet && !this.state.editMode ?
+    let facet = expression.get('facet') && !this.state.editMode ?
       (
         <div
         className="Clause-Facet"
         onClick={this.editFacet.bind(this)}>
-          { expression.facet }
+          { expression.get('facet') }
         </div>
       ) :
       (
@@ -18,7 +18,7 @@ export default class Facet extends Component {
           <input
           placeholder="Facet"
           ref="facetName"
-          defaultValue={ expression.facet || ''}
+          defaultValue={ expression.get('facet') || ''}
           onKeyDown={this.setFacetFromTabKey.bind(this)} />
         </form>
       );
@@ -29,13 +29,13 @@ export default class Facet extends Component {
   state = { editMode: true }
 
   componentDidMount() {
-    if (!R.isNil(this.refs.facetName)) {
+    if (this.refs.facetName) {
       this.refs.facetName.getDOMNode().focus();
     }
   }
 
   componentDidUpdate() {
-    if (!R.isNil(this.refs.facetName)) {
+    if (this.refs.facetName) {
       this.refs.facetName.getDOMNode().select();
       this.refs.facetName.getDOMNode().focus();
     }
@@ -46,8 +46,7 @@ export default class Facet extends Component {
       const { expression, setClauseFacet } = this.props;
       let facet = React.findDOMNode(this.refs.facetName).value;
 
-      expression.facet = facet;
-      setClauseFacet(expression);
+      setClauseFacet(expression.set('facet', facet));
 
       this.setState({ editMode: false});
     }
@@ -58,8 +57,7 @@ export default class Facet extends Component {
     const { expression, setClauseFacet } = this.props;
     let facet = React.findDOMNode(this.refs.facetName).value;
 
-    expression.facet = facet;
-    setClauseFacet(expression);
+    setClauseFacet(expression.set('facet', facet));
 
     this.setState({ editMode: false});
   }
@@ -70,5 +68,5 @@ export default class Facet extends Component {
 }
 
 Facet.propTypes = {
-  expression: PropTypes.object.isRequired
+  expression: PropTypes.instanceOf(Map).isRequired
 };

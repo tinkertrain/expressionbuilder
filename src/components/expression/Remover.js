@@ -1,3 +1,4 @@
+import { Map } from 'immutable';
 import React, { PropTypes } from 'react';
 
 export default class Remover {
@@ -15,6 +16,6 @@ export default class Remover {
 }
 
 Remover.propTypes = {
-  expression: PropTypes.object.isRequired,
+  expression: PropTypes.instanceOf(Map).isRequired,
   removeExpression: PropTypes.func.isRequired
 };

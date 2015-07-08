@@ -1,5 +1,5 @@
 import R from 'ramda';
-import { Map, List } from 'immutable';
+import { Map } from 'immutable';
 import React, { PropTypes } from 'react';
 import { DropTarget } from 'react-dnd';
 import DnDTypes from '../constants/DnDTypes';
@@ -15,7 +15,7 @@ let canvasTarget = {
   canDrop(props, monitor) {
     let item = monitor.getItem();
 
-    return props.canvas.length === 0 && (item.type === 'operator' || item.type === 'clause');
+    return props.builder.get('canvas').size === 0 && (item.type === 'operator' || item.type === 'clause');
   }
 };
 
@@ -28,7 +28,7 @@ export default class Canvas {
   render() {
     const { builder } = this.props;
     const { connectDropTarget, isOver, canDrop, setClauseOperator, setClauseFacet, setClauseValue, removeExpression } = this.props;
-    const canvas = builder.canvas;
+    const canvas = builder.get('canvas');
     let root = canvas.filter((exp) => {
       return exp.get('id') === 0;
     });
@@ -51,7 +51,7 @@ export default class Canvas {
           <Expression
           id = { exp.get('id') }
           key = { exp.get('id') }
-          canvas = { canvas } />
+          builder = { builder } />
         );
       });
     }
@@ -59,7 +59,6 @@ export default class Canvas {
       RootExpression = <div className="Canvas--empty">Drop some items!</div>;
     }
 
-    console.log(root.size);
     /*let root = R.filter(R.propEq('id', 0))(canvas);
     let RootExpression;
 
@@ -102,7 +101,7 @@ export default class Canvas {
 }
 
 Canvas.propTypes = {
-  builder: PropTypes.object.isRequired,
+  builder: PropTypes.instanceOf(Map).isRequired,
   isOver: PropTypes.func,
   canDrop: PropTypes.func,
   connectDragSource: PropTypes.func

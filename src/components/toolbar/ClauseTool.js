@@ -1,6 +1,6 @@
 import R from 'ramda';
+import { Map } from 'immutable';
 import React, { PropTypes } from 'react';
-
 import { DragSource } from 'react-dnd';
 import DnDTypes from '../../constants/DnDTypes';
 
@@ -15,24 +15,24 @@ let clauseToolSource = {
     if (!monitor.didDrop()) {
       return;
     }
+    let dropResult = monitor.getDropResult();
+    const canvas = dropResult.builder.get('canvas');
     let generateId = R.compose(
       R.add(1),
-      R.max,
-      R.pluck('id')
+      R.max
     );
-    let dropResult = monitor.getDropResult();
-
-    dropResult.addExpression({
+    let idList = canvas.map((exp) => exp.get('id')).toArray();
+    dropResult.addExpression(Map({
       type: 'clause',
       facet: null,
       value: null,
       clauseOperator: props.clauseOperator || 'equalTo',
       parent: dropResult.id,
       side: dropResult.side,
-      id: dropResult.canvas.length === 0 ?
+      id: canvas.size === 0 ?
         0 :
-        generateId(dropResult.canvas)
-    });
+        generateId(idList)
+    }));
   }
 };
 
@@ -45,9 +45,7 @@ export default class ClauseTool {
     const { isDragging, connectDragSource } = this.props;
 
     return connectDragSource(
-      <div className="ClauseTool">
-        Clause
-      </div>
+      <div className="ClauseTool">Clause</div>
     );
   }
 }

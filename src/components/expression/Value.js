@@ -1,16 +1,16 @@
-import R from 'ramda';
+import { Map } from 'immutable';
 import React, { Component, PropTypes } from 'react';
 
 export default class Value extends Component {
   render() {
     const { expression } = this.props;
 
-    let value = expression.value && !this.state.editMode ?
+    let value = expression.get('value') && !this.state.editMode ?
       (
         <div
         className="Clause-Value"
         onClick={this.editValue.bind(this)}>
-          { expression.value }
+          { expression.get('value') }
         </div>
       ) :
       (
@@ -18,7 +18,7 @@ export default class Value extends Component {
           <input
           placeholder="Value"
           ref="facetValue"
-          defaultValue={ expression.value || ''}
+          defaultValue={ expression.get('value') || ''}
           onKeyDown={this.setValueFromTabKey.bind(this)} />
         </form>
       );
@@ -29,7 +29,7 @@ export default class Value extends Component {
   state = { editMode: true }
 
   componentDidUpdate() {
-    if (!R.isNil(this.refs.facetValue)) {
+    if (this.refs.facetValue) {
       this.refs.facetValue.getDOMNode().select();
       this.refs.facetValue.getDOMNode().focus();
     }
@@ -40,8 +40,7 @@ export default class Value extends Component {
       const { expression, setClauseValue } = this.props;
       let value = React.findDOMNode(this.refs.facetValue).value;
 
-      expression.value = value;
-      setClauseValue(expression);
+      setClauseValue(expression.set('value', value));
 
       this.setState({ editMode: false});
     }
@@ -52,8 +51,7 @@ export default class Value extends Component {
     const { expression, setClauseValue } = this.props;
     let value = React.findDOMNode(this.refs.facetValue).value;
 
-    expression.value = value;
-    setClauseValue(expression);
+    setClauseValue(expression.set('value', value));
 
     this.setState({ editMode: false});
   }
@@ -64,5 +62,5 @@ export default class Value extends Component {
 }
 
 Value.propTypes = {
-  expression: PropTypes.object.isRequired
+  expression: PropTypes.instanceOf(Map).isRequired
 };

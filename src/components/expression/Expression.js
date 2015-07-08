@@ -1,5 +1,5 @@
-import R from 'ramda';
 import React, { Component, PropTypes } from 'react';
+import { Map } from 'immutable';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
@@ -12,72 +12,74 @@ import Clause from './Clause';
 import Remover from './Remover';
 
 @connect(state => ({
-  canvas: state.canvas
+  builder: state.builder
 }))
 export default class Expression extends Component {
   render() {
-    const { id, canvas } = this.props;
+    const { id, builder } = this.props;
     const { dispatch } = this.props;
 
     let leftSide;
     let rightSide;
-    let expression = R.find(R.propEq('id', id), canvas);
-    if (R.isNil(expression.left)) {
-      leftSide = (
-        <Placeholder
-        canvas = { canvas }
-        side = "left"
-        id = { id }
-        {...bindActionCreators(CanvasActions, dispatch)} />
-      );
-    }
-    else {
-      let leftExpression = R.find(R.propEq('id', expression.left), canvas);
+    const canvas = builder.get('canvas');
+    const expression = canvas.find((exp) => exp.get('id') === id);
 
-      if (leftExpression.type === 'clause') {
+    if (expression.get('left')) {
+      const leftExpression = canvas.find((exp) => exp.get('id') === expression.get('left'));
+
+      if (leftExpression.get('type') === 'clause') {
         leftSide = (
           <Clause
           expression = { leftExpression }
           {...bindActionCreators(CanvasActions, dispatch)} />
         );
       }
-      if (leftExpression.type === 'expression') {
+      if (leftExpression.get('type') === 'expression') {
         leftSide = (
           <Expression
-          id = { leftExpression.id }
-          key = { leftExpression.id }
-          canvas = { canvas } />
+          id = { leftExpression.get('id') }
+          key = { leftExpression.get('id') }
+          builder = { builder } />
         );
       }
     }
-
-    if (R.isNil(expression.right)) {
-      rightSide = (
+    else {
+      leftSide = (
         <Placeholder
-        canvas = { canvas }
-        side = "right"
+        builder = { builder }
+        side = "left"
         id = { id }
         {...bindActionCreators(CanvasActions, dispatch)} />
       );
     }
-    else {
-      let rightExpression = R.find(R.propEq('id', expression.right), canvas);
 
-      if (rightExpression.type === 'clause') {
+    if (expression.get('right')) {
+      let rightExpression = canvas.find((exp) => exp.get('id') === expression.get('right'));
+
+      if (rightExpression.get('type') === 'clause') {
         rightSide = (
           <Clause
           expression = { rightExpression }
           {...bindActionCreators(CanvasActions, dispatch)} />
         );
       }
-      if (rightExpression.type === 'expression') {
+      if (rightExpression.get('type') === 'expression') {
         rightSide = (
           <Expression
-          id = { rightExpression.id }
-          key = { rightExpression.id }
-          canvas = { canvas } />
+          id = { rightExpression.get('id') }
+          key = { rightExpression.get('id') }
+          builder = { builder } />
         );
       }
+    }
+    else {
+      rightSide = (
+        <Placeholder
+        builder = { builder }
+        side = "right"
+        id = { id }
+        {...bindActionCreators(CanvasActions, dispatch)} />
+      );
     }
 
     return (
@@ -89,7 +91,7 @@ export default class Expression extends Component {
         })
       }>
         { leftSide }
-        <ExpressionOperator operator = { expression.operator } />
+        <ExpressionOperator operator = { expression.get('operator') } />
         { rightSide }
         <div
         className = "Expression-RemoverWrapper"
@@ -112,6 +114,6 @@ export default class Expression extends Component {
 
 Expression.propTypes = {
   id: PropTypes.number.isRequired,
-  canvas: PropTypes.array.isRequired,
+  builder: PropTypes.instanceOf(Map).isRequired,
   dispatch: PropTypes.func
 };
