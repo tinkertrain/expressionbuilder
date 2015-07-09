@@ -59,34 +59,6 @@ export default class Canvas {
       RootExpression = <div className="Canvas--empty">Drop some items!</div>;
     }
 
-    /*let root = R.filter(R.propEq('id', 0))(canvas);
-    let RootExpression;
-
-    if (root.length > 0) {
-      RootExpression = root.map(function createRoot(exp) {
-        if (exp.type === 'clause') {
-          return (
-            <Clause
-            key="1"
-            removeExpression = { removeExpression }
-            setClauseFacet = { setClauseFacet }
-            setClauseOperator = { setClauseOperator }
-            setClauseValue = { setClauseValue }
-            expression = { exp } />
-          );
-        }
-        return (
-          <Expression
-          id = { exp.id }
-          key = { exp.id }
-          canvas = { canvas } />
-        );
-      });
-    }
-    else {
-      RootExpression = <div className="Canvas--empty">Drop some items!</div>;
-    }*/
-
     return connectDropTarget(
       <div
       className={classNames({

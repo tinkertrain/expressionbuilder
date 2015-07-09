@@ -1,4 +1,5 @@
 import R from 'ramda';
+import { Map } from 'immutable';
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
@@ -8,42 +9,61 @@ export default class FuseDial {
     let response = '';
     let items = '';
 
-    if (!R.isNil(fuse.response)) {
+    if (fuse.get('response')) {
       response = (
         <div className="FuseDial-Response">
-          <button onClick = { this.callResponses.bind(this, fuse.response.facets) }>Facets</button>
-          <button onClick = { this.callResponses.bind(this, fuse.response.contents) }>Contents</button>
+          <button
+          onClick = {
+            this.callResponses.bind(this, fuse.get('response').facets)
+          }>
+            Facets
+          </button>
+          <button
+          onClick = {
+            this.callResponses.bind(this, fuse.get('response').contents)
+          }>
+            Contents
+          </button>
         </div>
       );
     }
 
-    if (!R.isNil(fuse.items)) {
-      items = <pre className="FuseDial-Items">{ JSON.stringify(fuse.items, null, 2) }</pre>;
+    if (fuse.get('items')) {
+      items = <pre className="FuseDial-Items">{ JSON.stringify(fuse.get('items'), null, 2) }</pre>;
     }
 
     return (
-      <div>
-        <button
-        className = {
-          classNames({
-            'FuseDial-Caller': true,
-            'FuseDial-Caller--clicked': !R.isNil(fuse.response)
-          })
+      <div className="FuseDial">
+        {
+          fuse.get('expression') !== 'incomplete' && fuse.get('endPoint') ?
+          (
+            <button
+             className = {
+               classNames({
+                 'FuseDial-Caller': true,
+                 'FuseDial-Caller--clicked': !R.isNil(fuse.get('response'))
+               })
+             }
+             onClick={ this.callFuse.bind(this) }>
+               Call Fuse
+             </button>
+            ) :
+          <span className="FuseExpression-setEndPoint">Set a Fuse URL to see a response made with your expression</span>
+
         }
-        onClick={ this.callFuse.bind(this) }>Call Fuse</button>
 
-        { response }
+        { fuse.get('expression') !== 'incomplete' && fuse.get('endPoint') ? response : null }
 
-        { items }
+        { fuse.get('expression') !== 'incomplete' && fuse.get('endPoint') ? items : null }
       </div>
     );
   }
 
   callFuse() {
-    const { fuse, expression, dialFuse } = this.props;
+    const { fuse, dialFuse } = this.props;
     dialFuse({
-      endPoint: fuse.endPoint,
-      expression
+      endPoint: fuse.get('endPoint'),
+      expression: fuse.get('expression')
     });
   }
 
@@ -56,6 +76,5 @@ export default class FuseDial {
 FuseDial.propTypes = {
   getResults: PropTypes.func,
   dialFuse: PropTypes.func,
-  fuse: PropTypes.object.isRequired,
-  expression: PropTypes.string.isRequired
+  fuse: PropTypes.instanceOf(Map).isRequired
 };

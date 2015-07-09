@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Map } from 'immutable';
 import classNames from 'classnames';
 import Facet from './Facet';
 import ClauseOperator from './ClauseOperator';
@@ -49,7 +50,7 @@ export default class Clause extends Component {
 }
 
 Clause.propTypes = {
-  expression: PropTypes.object.isRequired,
+  expression: PropTypes.instanceOf(Map).isRequired,
   setClauseFacet: PropTypes.func,
   setClauseOperator: PropTypes.func,
   setClauseValue: PropTypes.func,

@@ -1,5 +1,5 @@
-import { Map } from 'immutable';
 import React, { Component, PropTypes } from 'react';
+import { Map } from 'immutable';
 
 export default class Facet extends Component {
   render() {

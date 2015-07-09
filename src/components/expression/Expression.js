@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
 
-import * as CanvasActions from '../../actions/CanvasActions';
+import * as BuilderActions from '../../actions/BuilderActions';
 
 import Placeholder from './Placeholder';
 import ExpressionOperator from './ExpressionOperator';
@@ -31,7 +31,7 @@ export default class Expression extends Component {
         leftSide = (
           <Clause
           expression = { leftExpression }
-          {...bindActionCreators(CanvasActions, dispatch)} />
+          {...bindActionCreators(BuilderActions, dispatch)} />
         );
       }
       if (leftExpression.get('type') === 'expression') {
@@ -49,7 +49,7 @@ export default class Expression extends Component {
         builder = { builder }
         side = "left"
         id = { id }
-        {...bindActionCreators(CanvasActions, dispatch)} />
+        {...bindActionCreators(BuilderActions, dispatch)} />
       );
     }
 
@@ -60,7 +60,7 @@ export default class Expression extends Component {
         rightSide = (
           <Clause
           expression = { rightExpression }
-          {...bindActionCreators(CanvasActions, dispatch)} />
+          {...bindActionCreators(BuilderActions, dispatch)} />
         );
       }
       if (rightExpression.get('type') === 'expression') {
@@ -78,7 +78,7 @@ export default class Expression extends Component {
         builder = { builder }
         side = "right"
         id = { id }
-        {...bindActionCreators(CanvasActions, dispatch)} />
+        {...bindActionCreators(BuilderActions, dispatch)} />
       );
     }
 
@@ -99,7 +99,7 @@ export default class Expression extends Component {
         onMouseLeave = { this.highlightExpression.bind(this, false) } >
           <Remover
           expression = { expression }
-          {...bindActionCreators(CanvasActions, dispatch)} />
+          {...bindActionCreators(BuilderActions, dispatch)} />
         </div>
       </div>
     );

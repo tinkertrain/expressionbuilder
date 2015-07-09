@@ -1,15 +1,15 @@
 import R from 'ramda';
+import { Map } from 'immutable';
 import React, { Component, PropTypes } from 'react';
 
 export default class FuseEndPoint extends Component {
   render() {
     const { fuse } = this.props;
-
-    let endPoint = !R.isNil(fuse.endPoint) && !this.state.editMode ?
+    let endPoint = fuse.get('endPoint') && !this.state.editMode ?
       (
         <div className="FuseEndPoint">
           <h3>Fuse URL</h3>
-          <span onClick = {this.editEndpoint.bind(this)}>{ fuse.endPoint }</span>
+          <span onClick = {this.editEndpoint.bind(this)}>{ fuse.get('endPoint') }</span>
         </div>
       ) :
       (
@@ -20,7 +20,7 @@ export default class FuseEndPoint extends Component {
             type="text"
             id="endpoint"
             ref="endpoint"
-            defaultValue={ fuse.endPoint || ''}
+            defaultValue={ fuse.get('endPoint') || ''}
             placeholder="http://0.0.0.0"/>
           </form>
         </div>
@@ -49,7 +49,7 @@ export default class FuseEndPoint extends Component {
     const { setFuseEndPoint, fuse } = this.props;
     let endpoint = React.findDOMNode(this.refs.endpoint).value;
 
-    if (R.isNil(fuse.endPoint) || fuse.endPoint !== endpoint) {
+    if (fuse.get('endPoint') || fuse.get('endPoint') !== endpoint) {
       setFuseEndPoint(endpoint);
     }
 
@@ -62,6 +62,6 @@ export default class FuseEndPoint extends Component {
 }
 
 FuseEndPoint.propTypes = {
-  fuse: PropTypes.object.isRequired,
+  fuse: PropTypes.instanceOf(Map).isRequired,
   setFuseEndPoint: PropTypes.func
 };

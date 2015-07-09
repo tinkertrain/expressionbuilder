@@ -1,20 +1,23 @@
-import R from 'ramda';
 import { Map, List } from 'immutable';
+import { clauseOperators } from 'queryapi';
+import { queryOperators } from 'queryapi';
 
-import { ADD_EXPRESSION, SET_CLAUSE_FACET, SET_CLAUSE_VALUE, SET_CLAUSE_OPERATOR, REMOVE_EXPRESSION } from '../constants/ActionTypes';
+import * as aT from '../constants/ActionTypes';
 
 let initialState = Map({
   canvas: List(),
-  fuse: Map()
+  fuse: Map({ expression: 'incomplete'})
 });
 
 export default function builder(state = initialState, action) {
   const canvas = state.get('canvas');
+  const fuse = state.get('fuse');
   const expression = action.expression;
   let newCanvas;
+  let newFuse;
 
   switch (action.type) {
-    case ADD_EXPRESSION:
+    case aT.ADD_EXPRESSION:
       if (canvas.size !== 0) {
         let updatedParent = canvas.map((exp) => {
           if (exp.get('id') === expression.get('parent')) {
@@ -24,16 +27,16 @@ export default function builder(state = initialState, action) {
         });
         newCanvas = updatedParent.push(expression);
       }
-      else {
-        newCanvas = canvas.push(expression);
-      }
+    else {
+      newCanvas = canvas.push(expression);
+    }
 
       return Map({
         canvas: newCanvas,
         fuse: state.get('fuse')
       });
 
-    case REMOVE_EXPRESSION:
+    case aT.REMOVE_EXPRESSION:
       let parentIndex = canvas.findIndex((exp) => exp.get('id') === expression.get('parent'));
 
       if (parentIndex > -1) {
@@ -53,33 +56,67 @@ export default function builder(state = initialState, action) {
           return exp;
         });
 
-        newCanvas = updatedParent.filterNot((exp) => R.contains(exp.get('id'), children));
+        newCanvas = updatedParent.filterNot((exp) => children.indexOf(exp.get('id')) !== -1);
       }
-      else {
-        newCanvas = List();
-      }
+    else {
+      newCanvas = List();
+    }
+      newFuse = saveExpression(newCanvas, fuse);
 
       return Map({
         canvas: newCanvas,
-        fuse: state.get('fuse')
+        fuse: newFuse
       });
 
-    case SET_CLAUSE_FACET:
+    case aT.SET_CLAUSE_FACET:
+      newCanvas = mapUpdate('facet', expression, canvas);
+      newFuse = saveExpression(newCanvas, fuse);
+
       return Map({
-        canvas: mapUpdate('facet', expression, canvas),
-        fuse: state.get('fuse')
+        canvas: newCanvas,
+        fuse: newFuse.get('expression') !== fuse.get('expression') ?
+          newFuse.set('response', null).set('items', null) :
+          newFuse
       });
 
-    case SET_CLAUSE_VALUE:
+    case aT.SET_CLAUSE_VALUE:
+      newCanvas = mapUpdate('value', expression, canvas);
+      newFuse = saveExpression(newCanvas, fuse);
+
       return Map({
-        canvas: mapUpdate('value', expression, canvas),
-        fuse: state.get('fuse')
+        canvas: newCanvas,
+        fuse: newFuse.get('expression') !== fuse.get('expression') ?
+          newFuse.set('response', null).set('items', null) :
+          newFuse
       });
 
-    case SET_CLAUSE_OPERATOR:
+    case aT.SET_CLAUSE_OPERATOR:
+      newCanvas = mapUpdate('clauseOperator', expression, canvas);
+      newFuse = saveExpression(newCanvas, fuse);
+
       return Map({
-        canvas: mapUpdate('clauseOperator', expression, canvas),
-        fuse: state.get('fuse')
+        canvas: newCanvas,
+        fuse: newFuse.get('expression') !== fuse.get('expression') ?
+          newFuse.set('response', null).set('items', null) :
+          newFuse
+      });
+
+    case aT.SET_FUSE_ENDPOINT:
+      return Map({
+        canvas: canvas,
+        fuse: fuse.set('endPoint', action.url)
+      });
+
+    case aT.DIAL_FUSE:
+      return Map({
+        canvas: canvas,
+        fuse: fuse.set('response', action.response)
+      });
+
+    case aT.GET_RESULTS:
+      return Map({
+        canvas: canvas,
+        fuse: fuse.set('items', action.items)
       });
 
     default:
@@ -94,4 +131,63 @@ function mapUpdate(val, expression, list) {
     }
     return exp;
   });
+}
+
+function saveExpression(canvas, fuse) {
+  if (canvas.size && isCanvasComplete(canvas)) {
+    let prepared = traverseCanvas(prepareCanvas(canvas));
+    let parsed = prepared.find((exp) => exp.get('id') === 0).get('resolved');
+    return fuse.set('expression', parsed);
+  }
+  return fuse.set('expression', 'incomplete');
+}
+
+function isCanvasComplete(canvas) {
+  let clauses = canvas
+    .filter((exp) => exp.get('type') === 'clause')
+    .skipWhile((exp) => exp.get('facet') && exp.get('value'));
+  let expressions = canvas
+    .filter((exp) => exp.get('type') === 'expression')
+    .skipWhile((exp) => exp.get('left') && exp.get('right'));
+
+  return clauses.size === 0 && expressions.size === 0;
+}
+
+function prepareCanvas(canvas) {
+  let resolvedClauses = canvas.map((exp) => {
+    if (exp.get('type') === 'clause') {
+      return exp.set(
+        'resolved',
+        clauseOperators[exp.get('clauseOperator')](exp.get('facet'), exp.get('value'))
+        );
+    }
+    return exp;
+  });
+
+  return resolvedClauses;
+}
+
+function traverseCanvas(canvas) {
+  let resolvingCanvas = canvas.map((exp) => {
+    let left = canvas.find((e) => e.get('id') === exp.get('left'));
+    let right = canvas.find((e) => e.get('id') === exp.get('right'));
+    if (exp.get('type') === 'expression') {
+      if (!exp.get('resolved')) {
+        if (left.get('resolved') && right.get('resolved')) {
+          return exp.set('resolved',
+            queryOperators[exp.get('operator')](left.get('resolved'), right.get('resolved'))
+          );
+        }
+        return exp;
+      }
+      return exp;
+    }
+    return exp;
+  });
+
+  if (resolvingCanvas.filterNot((exp) => exp.get('resolved')).size > 0) {
+    traverseCanvas(resolvingCanvas);
+  }
+
+  return resolvingCanvas;
 }
