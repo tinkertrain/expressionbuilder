@@ -906,3 +906,30 @@ footer {
     }
   }
 }
+.Filler {
+  vertical-align: middle;
+  background-color: transparent;
+  color: lighten(lightsteelblue, 5%);
+  font-family: Consolas, Monaco, monospace;
+  display: inline-block;
+  border: 0;
+  padding: 0;
+  font-size: 11px;
+  width: 75px;
+  height: 30px;
+  line-height: 30px;
+  float: right;
+  border: 2px solid lightseagreen;
+  &:hover {
+    color: lightseagreen;
+    border: 2px solid darken(lightseagreen, 10%);
+    box-shadow: inset 0 0 7px rgba(darken(slategray, 50%), 0.25);
+  }
+  &[disabled] {
+    border: 2px solid darken(lightslategray, 15%);;
+    color: darken(lightslategray, 15%);
+  }
+}
+input:focus {
+  outline: 2px solid papayawhip;
+}

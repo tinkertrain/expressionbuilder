@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
 
@@ -30,7 +31,9 @@ export default class Builder extends Component{
         fuse = { builder.get('fuse') }
         {...bindActionCreators(BuilderActions, dispatch)} />
 
-        <Toolbar />
+        <Toolbar
+        builder = { builder }
+        {...bindActionCreators(BuilderActions, dispatch)} />
 
         <Canvas
         builder = { builder }
@@ -52,5 +55,5 @@ export default class Builder extends Component{
 
 Builder.propTypes = {
   dispatch: PropTypes.func,
-  builder: PropTypes.object
+  builder: PropTypes.instanceOf(Map)
 };

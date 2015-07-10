@@ -1,7 +1,6 @@
+import R from 'ramda';
 import { Map, List } from 'immutable';
-import { clauseOperators } from 'queryapi';
-import { queryOperators } from 'queryapi';
-
+import * as canvasUtils from '../utils/canvasUtils';
 import * as aT from '../constants/ActionTypes';
 
 let initialState = Map({
@@ -71,6 +70,63 @@ export default function builder(state = initialState, action) {
           .set('facets', null)
           .set('contents', null) :
           newFuse
+      });
+
+    case aT.FILL_EMPTY:
+      let generateId = R.compose(
+        R.add(1),
+        R.max
+      );
+      let idList = canvas.map((exp) => exp.get('id')).toArray();
+      let clausesToAdd = [];
+
+      newCanvas = canvas.map((exp) => {
+        if (exp.get('type') === 'expression') {
+          let leftId;
+          let rightId;
+
+          if (!exp.get('left')) {
+            leftId = generateId(idList);
+            clausesToAdd.push(Map({
+              type: 'clause',
+              facet: null,
+              value: null,
+              clauseOperator: 'equalTo',
+              parent: exp.get('id'),
+              side: 'left',
+              id: leftId
+            }));
+            idList.push(leftId);
+          }
+          else {
+            leftId = exp.get('left');
+          }
+          if (!exp.get('right')) {
+            rightId = generateId(idList);
+            clausesToAdd.push(Map({
+              type: 'clause',
+              facet: null,
+              value: null,
+              clauseOperator: 'equalTo',
+              parent: exp.get('id'),
+              side: 'right',
+              id: rightId
+            }));
+            idList.push(rightId);
+          }
+          else {
+            rightId = exp.get('right');
+          }
+
+          return exp.set('left', leftId).set('right', rightId);
+        }
+        return exp;
+      });
+
+
+      return Map({
+        canvas: newCanvas.concat(List(clausesToAdd)),
+        fuse: fuse
       });
 
     case aT.SET_CLAUSE_FACET:
@@ -154,9 +210,9 @@ function mapUpdate(val, expression, list) {
 }
 
 function saveExpression(canvas, fuse) {
-  if (canvas.size && isCanvasComplete(canvas)) {
-    let prepared = prepareCanvas(canvas);
-    let traversed = traverseCanvas(prepared);
+  if (canvas.size && canvasUtils.isCanvasComplete(canvas)) {
+    let prepared = canvasUtils.prepareCanvas(canvas);
+    let traversed = canvasUtils.traverseCanvas(prepared);
     let parsed = traversed.find((exp) => exp.get('id') === 0).get('resolved');
 
     return fuse.set('expression', parsed);
@@ -164,53 +220,3 @@ function saveExpression(canvas, fuse) {
   return fuse.set('expression', 'incomplete');
 }
 
-function isCanvasComplete(canvas) {
-  let clauses = canvas
-    .filter((exp) => exp.get('type') === 'clause')
-    .skipWhile((exp) => exp.get('facet') && exp.get('value'));
-  let expressions = canvas
-    .filter((exp) => exp.get('type') === 'expression')
-    .skipWhile((exp) => exp.get('left') && exp.get('right'));
-
-  return clauses.size === 0 && expressions.size === 0;
-}
-
-function prepareCanvas(canvas) {
-  let resolvedClauses = canvas.map((exp) => {
-    if (exp.get('type') === 'clause') {
-      return exp.set(
-        'resolved',
-        clauseOperators[exp.get('clauseOperator')](exp.get('facet'), exp.get('value'))
-        );
-    }
-    return exp;
-  });
-
-  return resolvedClauses;
-}
-
-function traverseCanvas(canvas) {
-  let rootResolved = canvas.find((exp) => exp.get('id') === 0).get('resolved');
-  if (rootResolved) {
-    return canvas;
-  }
-  let resolvingCanvas = canvas.map((exp) => {
-    let left = canvas.find((e) => e.get('id') === exp.get('left'));
-    let right = canvas.find((e) => e.get('id') === exp.get('right'));
-
-    if (exp.get('type') === 'expression') {
-      if (!exp.get('resolved')) {
-        if (left.get('resolved') && right.get('resolved')) {
-          return exp.set('resolved',
-            queryOperators[exp.get('operator')](left.get('resolved'), right.get('resolved'))
-          );
-        }
-        return exp;
-      }
-      return exp;
-    }
-    return exp;
-  });
-
-  return traverseCanvas(resolvingCanvas);
-}

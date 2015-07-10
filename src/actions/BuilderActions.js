@@ -16,6 +16,13 @@ export function removeExpression(expression) {
   };
 }
 
+export function fillEmpty(canvas) {
+  return {
+    type: aT.FILL_EMPTY,
+    canvas
+  };
+}
+
 export function setClauseFacet(expression) {
   return {
     type: aT.SET_CLAUSE_FACET,
