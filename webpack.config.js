@@ -47,6 +47,14 @@ if (TARGET === 'build') {
           exclude: /node_modules/
         },
         {
+          test: /\.css$/,
+          loaders: [
+            'style-loader',
+            'css-loader',
+            'autoprefixer-loader?browsers=last 2 version'
+          ]
+        },
+        {
           test: /\.scss$/,
           loaders: [
             'style-loader',
