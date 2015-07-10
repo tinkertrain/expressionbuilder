@@ -445,6 +445,7 @@ body {
   border-radius: 2px;
   box-shadow: 0 0 1px rgba(darken(lightslategray, 10%), 0.25);
   width: 90%;
+  max-width: 900px;
   min-height: 70px;
   padding: 10px;
   margin: 20px auto;
@@ -650,6 +651,7 @@ body {
 }
 .FuseExpression {
   width: 90%;
+  max-width: 900px;
   background-color: darken(lightslategray, 10%);
   padding: 10px;
   margin: 20px auto;
@@ -673,6 +675,7 @@ body {
 }
 .Toolbar {
   width: 90%;
+  max-width: 900px;
   background-color: darken(lightslategray, 37%);
   padding: 10px;
   margin: 0 auto 20px;
@@ -725,6 +728,7 @@ body {
   line-height: 30px;
   border-radius: 3px;
   padding: 0 10px;
+  margin-right: 10px;
   background-color: darken(mediumturquoise, 35%);
   border-radius: 8px;
   background-color: darken(mediumturquoise, 35%);
@@ -735,7 +739,6 @@ body {
 
   background-repeat: no-repeat;
   background-size: cover;
-  margin-right: 5px;
   display: inline-block;
   vertical-align: middle;
   text-align: center;
@@ -744,7 +747,6 @@ body {
   font-size: 12px;
   box-shadow: inset 1px 1px 1px darken(mediumturquoise, 20%),
               1px 1px 1px darken(mediumturquoise, 40%);
-  float: right;
 }
 #QLogo {
   display: block;
@@ -811,6 +813,15 @@ body {
       border-radius: 0 0 8px 0;
     }
   }
+  button.active {
+    background-color: darken(lightseagreen, 40%);
+    background-image: radial-gradient(
+      ellipse at 15px 13px,
+      darken(lightseagreen, 26%) 24%,
+      darken(lightseagreen, 30%) 100%);
+    box-shadow: inset 1px 1px 1px darken(lightseagreen, 25%),
+                1px 1px 1px darken(lightseagreen, 40%);
+  }
 
 }
 .FuseDial-Items {
@@ -865,9 +876,33 @@ body {
 }
 .FuseDial {
   width: 90%;
+  max-width: 900px;
   background-color: darken(lightslategray, 10%);
-  padding: 10px;
+  padding: 40px 10px;
   margin: 20px auto;
   text-align: center;
   border-radius: 2px;
+
+  h3 {
+    font-family: Futura, sans-serif;
+    font-weight: 300;
+    text-align: left;
+    font-size: 15px;
+    color: darken(lightslategray, 35%);
+  }
+}
+footer {
+  text-align: right;
+  width: 90%;
+  max-width: 900px;
+  margin: 0 auto 20px;
+  a {
+    color: darken(lightslategray, 5%);
+    font-size: 14px;
+    text-decoration: none;
+
+    &:visited {
+      color: darken(lightslategray, 5%);
+    }
+  }
 }

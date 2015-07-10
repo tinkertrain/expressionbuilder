@@ -65,7 +65,12 @@ export default function builder(state = initialState, action) {
 
       return Map({
         canvas: newCanvas,
-        fuse: newFuse
+        fuse: newFuse.get('expression') !== fuse.get('expression') ?
+          newFuse
+          .set('response', null)
+          .set('facets', null)
+          .set('contents', null) :
+          newFuse
       });
 
     case aT.SET_CLAUSE_FACET:
@@ -75,7 +80,10 @@ export default function builder(state = initialState, action) {
       return Map({
         canvas: newCanvas,
         fuse: newFuse.get('expression') !== fuse.get('expression') ?
-          newFuse.set('response', null).set('items', null) :
+          newFuse
+          .set('response', null)
+          .set('facets', null)
+          .set('contents', null) :
           newFuse
       });
 
@@ -86,7 +94,10 @@ export default function builder(state = initialState, action) {
       return Map({
         canvas: newCanvas,
         fuse: newFuse.get('expression') !== fuse.get('expression') ?
-          newFuse.set('response', null).set('items', null) :
+          newFuse
+          .set('response', null)
+          .set('facets', null)
+          .set('contents', null) :
           newFuse
       });
 
@@ -97,7 +108,10 @@ export default function builder(state = initialState, action) {
       return Map({
         canvas: newCanvas,
         fuse: newFuse.get('expression') !== fuse.get('expression') ?
-          newFuse.set('response', null).set('items', null) :
+          newFuse
+          .set('response', null)
+          .set('facets', null)
+          .set('contents', null) :
           newFuse
       });
 
@@ -113,10 +127,16 @@ export default function builder(state = initialState, action) {
         fuse: fuse.set('response', action.response)
       });
 
-    case aT.GET_RESULTS:
+    case aT.GET_FACETS:
       return Map({
         canvas: canvas,
-        fuse: fuse.set('items', action.items)
+        fuse: fuse.set('facets', action.items)
+      });
+
+    case aT.GET_CONTENTS:
+      return Map({
+        canvas: canvas,
+        fuse: fuse.set('contents', action.items)
       });
 
     default:
@@ -135,8 +155,10 @@ function mapUpdate(val, expression, list) {
 
 function saveExpression(canvas, fuse) {
   if (canvas.size && isCanvasComplete(canvas)) {
-    let prepared = traverseCanvas(prepareCanvas(canvas));
-    let parsed = prepared.find((exp) => exp.get('id') === 0).get('resolved');
+    let prepared = prepareCanvas(canvas);
+    let traversed = traverseCanvas(prepared);
+    let parsed = traversed.find((exp) => exp.get('id') === 0).get('resolved');
+
     return fuse.set('expression', parsed);
   }
   return fuse.set('expression', 'incomplete');
@@ -168,9 +190,14 @@ function prepareCanvas(canvas) {
 }
 
 function traverseCanvas(canvas) {
+  let rootResolved = canvas.find((exp) => exp.get('id') === 0).get('resolved');
+  if (rootResolved) {
+    return canvas;
+  }
   let resolvingCanvas = canvas.map((exp) => {
     let left = canvas.find((e) => e.get('id') === exp.get('left'));
     let right = canvas.find((e) => e.get('id') === exp.get('right'));
+
     if (exp.get('type') === 'expression') {
       if (!exp.get('resolved')) {
         if (left.get('resolved') && right.get('resolved')) {
@@ -185,9 +212,5 @@ function traverseCanvas(canvas) {
     return exp;
   });
 
-  if (resolvingCanvas.filterNot((exp) => exp.get('resolved')).size > 0) {
-    traverseCanvas(resolvingCanvas);
-  }
-
-  return resolvingCanvas;
+  return traverseCanvas(resolvingCanvas);
 }

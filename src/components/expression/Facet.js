@@ -30,14 +30,14 @@ export default class Facet extends Component {
 
   componentDidMount() {
     if (this.refs.facetName) {
-      this.refs.facetName.getDOMNode().focus();
+      React.findDOMNode(this.refs.facetName).focus();
     }
   }
 
   componentDidUpdate() {
     if (this.refs.facetName) {
-      this.refs.facetName.getDOMNode().select();
-      this.refs.facetName.getDOMNode().focus();
+      React.findDOMNode(this.refs.facetName).select();
+      React.findDOMNode(this.refs.facetName).focus();
     }
   }
 

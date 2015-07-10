@@ -43,6 +43,8 @@ export default class Builder extends Component{
         fuse = { builder.get('fuse')}
         {...bindActionCreators(BuilderActions, dispatch)} />
 
+        <footer><a href="http://www.qsensei.com/">Q-Sensei</a></footer>
+
       </div>
     );
   }

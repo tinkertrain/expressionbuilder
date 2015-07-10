@@ -82,18 +82,36 @@ export function dialFuse(params) {
   };
 }
 
-export function getResults(url) {
+export function getFacets(url) {
   return (dispatch) => {
     request(url)
     .then((res) => {
       return dispatch({
-        type: aT.GET_RESULTS,
+        type: aT.GET_FACETS,
         items: R.take(5, res.body.items)
       });
     })
     .catch(() => {
       return dispatch({
-        type: aT.GET_RESULTS,
+        type: aT.GET_FACETS,
+        items: []
+      });
+    });
+  };
+}
+
+export function getContents(url) {
+  return (dispatch) => {
+    request(url)
+    .then((res) => {
+      return dispatch({
+        type: aT.GET_CONTENTS,
+        items: R.take(5, res.body.items)
+      });
+    })
+    .catch(() => {
+      return dispatch({
+        type: aT.GET_CONTENTS,
         items: []
       });
     });

@@ -17,8 +17,8 @@ export default class List {
 
     return (
       <div className="Toolbar">
-        { Operators }
         <ClauseTool />
+        { Operators }
       </div>
     );
   }

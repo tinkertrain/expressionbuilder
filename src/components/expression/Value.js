@@ -30,8 +30,8 @@ export default class Value extends Component {
 
   componentDidUpdate() {
     if (this.refs.facetValue) {
-      this.refs.facetValue.getDOMNode().select();
-      this.refs.facetValue.getDOMNode().focus();
+      React.findDOMNode(this.refs.facetValue).select();
+      React.findDOMNode(this.refs.facetValue).focus();
     }
   }
 

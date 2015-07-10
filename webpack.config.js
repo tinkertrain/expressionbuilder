@@ -118,6 +118,14 @@ if (TARGET === 'dev') {
           ]
         },
         {
+          test: /\.css$/,
+          loaders: [
+            'style-loader',
+            'css-loader',
+            'autoprefixer-loader?browsers=last 2 version'
+          ]
+        },
+        {
           test: /\.(jpe?g|png|gif|svg)$/i,
           loaders: [
             'file?hash=sha512&digest=hex&name=[hash].[ext]',

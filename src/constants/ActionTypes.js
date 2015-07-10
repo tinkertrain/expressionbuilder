@@ -5,4 +5,5 @@ export const SET_CLAUSE_VALUE = 'SET_CLAUSE_VALUE';
 export const SET_CLAUSE_OPERATOR = 'SET_CLAUSE_OPERATOR';
 export const SET_FUSE_ENDPOINT = 'SET_FUSE_ENDPOINT';
 export const DIAL_FUSE = 'DIAL_FUSE';
-export const GET_RESULTS = 'GET_RESULTS';
+export const GET_FACETS = 'GET_FACETS';
+export const GET_CONTENTS = 'GET_CONTENTS';

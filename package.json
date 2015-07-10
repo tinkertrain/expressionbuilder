@@ -55,6 +55,8 @@
     "bluebird": "^2.9.32",
     "classnames": "^2.1.2",
     "immutable": "^3.7.4",
+    "prismjs": "0.0.1",
+    "prismjs-okaidia-theme": "0.0.1",
     "ramda": "^0.15.1",
     "react": "^0.13.3",
     "react-dnd": "^1.1.3",

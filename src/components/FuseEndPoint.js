@@ -33,14 +33,14 @@ export default class FuseEndPoint extends Component {
 
   componentDidMount() {
     if (!R.isNil(this.refs.endpoint)) {
-      this.refs.endpoint.getDOMNode().focus();
+      React.findDOMNode(this.refs.endpoint).focus();
     }
   }
 
   componentDidUpdate() {
     if (!R.isNil(this.refs.endpoint)) {
-      this.refs.endpoint.getDOMNode().select();
-      this.refs.endpoint.getDOMNode().focus();
+      React.findDOMNode(this.refs.endpoint).select();
+      React.findDOMNode(this.refs.endpoint).focus();
     }
   }
 
