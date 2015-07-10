@@ -123,7 +123,6 @@ export default function builder(state = initialState, action) {
         return exp;
       });
 
-
       return Map({
         canvas: newCanvas.concat(List(clausesToAdd)),
         fuse: fuse
