@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
+import pureRender from '../../utils/pureRender';
 
 import And from '../icons/And';
 import Or from '../icons/Or';
 import Not from '../icons/Not';
 
 
-export default class ExpressionOperator {
+class ExpressionOperator {
   render() {
     const { operator } = this.props;
     const icon = {
@@ -38,6 +39,10 @@ export default class ExpressionOperator {
     );
   }
 }
+
+pureRender(ExpressionOperator);
+
+export default ExpressionOperator;
 
 ExpressionOperator.propTypes = {
   operator: PropTypes.string.isRequired

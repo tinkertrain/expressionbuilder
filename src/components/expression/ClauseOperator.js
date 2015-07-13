@@ -1,8 +1,9 @@
 import R from 'ramda';
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import pureRender from '../../utils/pureRender';
 
-export default class ClauseOperator extends Component {
+class ClauseOperator extends Component {
   render() {
     const { expression } = this.props;
     const symbols = {
@@ -55,6 +56,10 @@ export default class ClauseOperator extends Component {
     this.setState({ showOperators: !this.state.showOperators });
   }
 }
+
+pureRender(ClauseOperator);
+
+export default ClauseOperator;
 
 ClauseOperator.propTypes = {
   expression: PropTypes.object.isRequired,

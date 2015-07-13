@@ -1,12 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import classNames from 'classnames';
+import pureRender from '../../utils/pureRender';
+
 import Facet from './Facet';
 import ClauseOperator from './ClauseOperator';
 import Value from './Value';
 import Remover from './Remover';
 
-export default class Clause extends Component {
+class Clause extends Component {
   render() {
     const { expression, setClauseFacet, setClauseValue, setClauseOperator, removeExpression } = this.props;
 
@@ -48,6 +50,10 @@ export default class Clause extends Component {
     this.setState({ highlightExpression: highlight });
   }
 }
+
+pureRender(Clause);
+
+export default Clause;
 
 Clause.propTypes = {
   expression: PropTypes.instanceOf(Map).isRequired,

@@ -2,9 +2,10 @@ import R from 'ramda';
 import { Map } from 'immutable';
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import pureRender from '../utils/pureRender';
 import ItemsRenderer from './ItemsRenderer';
 
-export default class FuseDial extends Component {
+class FuseDial extends Component {
   render() {
     const { fuse } = this.props;
     let response = '';
@@ -14,6 +15,7 @@ export default class FuseDial extends Component {
       response = (
         <div className="FuseDial-Response">
           <button
+          disabled = { this.state.showing.facets }
           className = { classNames({
             active: this.state.showing.facets
           }) }
@@ -22,6 +24,7 @@ export default class FuseDial extends Component {
           }>Facets</button>
 
           <button
+          disabled = { this.state.showing.contents }
           className = { classNames({
             active: this.state.showing.contents
           }) }
@@ -50,14 +53,15 @@ export default class FuseDial extends Component {
           fuse.get('expression') !== 'incomplete' && fuse.get('endPoint') ?
           (
             <button
-             className = {
-               classNames({
-                 'FuseDial-Caller': true,
-                 'FuseDial-Caller--clicked': !R.isNil(fuse.get('response'))
-               })
-             }
-             onClick={ this.callFuse.bind(this) }>
-               Call Fuse
+            disabled = { !!fuse.get('response') }
+            className = {
+              classNames({
+               'FuseDial-Caller': true,
+               'FuseDial-Caller--clicked': !R.isNil(fuse.get('response'))
+              })
+            }
+            onClick={ this.callFuse.bind(this) }>
+               { !!fuse.get('response') ? 'Fuse Called' : 'Call Fuse' }
              </button>
             ) :
           <span className="FuseExpression-setEndPoint">Set a valid Fuse URL to see a response made with your expression</span>
@@ -107,6 +111,10 @@ export default class FuseDial extends Component {
     }
   }
 }
+
+pureRender(FuseDial);
+
+export default FuseDial;
 
 FuseDial.propTypes = {
   getFacets: PropTypes.func,

@@ -1,7 +1,8 @@
 import { Map } from 'immutable';
 import React, { Component, PropTypes } from 'react';
+import pureRender from '../../utils/pureRender';
 
-export default class Value extends Component {
+class Value extends Component {
   render() {
     const { expression } = this.props;
 
@@ -40,9 +41,10 @@ export default class Value extends Component {
       const { expression, setClauseValue } = this.props;
       let value = React.findDOMNode(this.refs.facetValue).value;
 
-      setClauseValue(expression.set('value', value));
-
-      this.setState({ editMode: false});
+      if (value) {
+        setClauseValue(expression.set('value', value));
+        this.setState({ editMode: false});
+      }
     }
   }
 
@@ -51,15 +53,20 @@ export default class Value extends Component {
     const { expression, setClauseValue } = this.props;
     let value = React.findDOMNode(this.refs.facetValue).value;
 
-    setClauseValue(expression.set('value', value));
-
-    this.setState({ editMode: false});
+    if (value) {
+      setClauseValue(expression.set('value', value));
+      this.setState({ editMode: false});
+    }
   }
 
   editValue() {
     this.setState({ editMode: true});
   }
 }
+
+pureRender(Value);
+
+export default Value;
 
 Value.propTypes = {
   expression: PropTypes.instanceOf(Map).isRequired

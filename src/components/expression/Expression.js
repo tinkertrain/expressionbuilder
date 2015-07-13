@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
+import pureRender from '../../utils/pureRender';
 
 import * as BuilderActions from '../../actions/BuilderActions';
 
@@ -14,7 +15,7 @@ import Remover from './Remover';
 @connect(state => ({
   builder: state.builder
 }))
-export default class Expression extends Component {
+class Expression extends Component {
   render() {
     const { id, builder } = this.props;
     const { dispatch } = this.props;
@@ -107,10 +108,25 @@ export default class Expression extends Component {
 
   state = { highlightExpression: false }
 
+  componentDidUpdate() {
+    let inputs = document.querySelectorAll('.Expression input');
+
+    if (inputs.length) {
+      Array.prototype.forEach.call(inputs, (input, index) => {
+        if (index === 0) { input.focus(); }
+        input.tabIndex = index + 2;
+      });
+    }
+  }
+
   highlightExpression(highlight) {
     this.setState({ highlightExpression: highlight });
   }
 }
+
+pureRender(Expression);
+
+export default Expression;
 
 Expression.propTypes = {
   id: PropTypes.number.isRequired,

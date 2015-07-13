@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
+import pureRender from '../../utils/pureRender';
 
-export default class Or {
+class Or {
   render() {
     const { id, color, width, height } = this.props;
 
@@ -20,6 +21,10 @@ export default class Or {
     );
   }
 }
+
+pureRender(Or);
+
+export default Or;
 
 Or.propTypes = {
   id: PropTypes.string.isRequired,

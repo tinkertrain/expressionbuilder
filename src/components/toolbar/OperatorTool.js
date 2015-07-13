@@ -1,9 +1,10 @@
 import R from 'ramda';
-import { Map, List } from 'immutable';
+import { Map } from 'immutable';
 import React, { PropTypes } from 'react';
 
 import { DragSource } from 'react-dnd';
 import DnDTypes from '../../constants/DnDTypes';
+import pureRender from '../../utils/pureRender';
 
 import And from '../icons/And';
 import Or from '../icons/Or';
@@ -47,7 +48,7 @@ let operandSource = {
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
-export default class OperatorTool {
+class OperatorTool {
   render() {
     const { operator } = this.props;
     const { isDragging, connectDragSource } = this.props;
@@ -83,6 +84,10 @@ export default class OperatorTool {
     );
   }
 }
+
+pureRender(OperatorTool);
+
+export default OperatorTool;
 
 OperatorTool.propTypes = {
   operator: PropTypes.string.isRequired,

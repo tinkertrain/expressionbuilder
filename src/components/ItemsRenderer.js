@@ -1,13 +1,10 @@
 import React, { PropTypes } from 'react';
 import Prism from 'prismjs';
-require('../../node_modules/prismjs-okaidia-theme/prism-okaidia.css');
+import pureRender from '../utils/pureRender';
+import '../../node_modules/prismjs-okaidia-theme/prism-okaidia.css';
 
-export default class ItemsRenderer {
+class ItemsRenderer {
   componentDidMount() {
-    Prism.highlightElement(React.findDOMNode(this.refs.items));
-  }
-
-  componentDidUpdate() {
     Prism.highlightElement(React.findDOMNode(this.refs.items));
   }
 
@@ -22,8 +19,15 @@ export default class ItemsRenderer {
       </pre>
     );
   }
+
+  componentDidUpdate() {
+    Prism.highlightElement(React.findDOMNode(this.refs.items));
+  }
 }
 
+pureRender(ItemsRenderer);
+
+export default ItemsRenderer;
 
 ItemsRenderer.propTypes = {
   items: PropTypes.string.isRequired

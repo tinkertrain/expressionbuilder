@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
+import pureRender from '../../utils/pureRender';
 
 import { DropTarget } from 'react-dnd';
 import DnDTypes from '../../constants/DnDTypes';
@@ -20,8 +21,7 @@ let placeholderTarget = {
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop()
 }))
-export default class Placeholder {
-
+class Placeholder {
   render() {
     const { side } = this.props;
     const { connectDropTarget, isOver, canDrop } = this.props;
@@ -36,6 +36,10 @@ export default class Placeholder {
     );
   }
 }
+
+pureRender(Placeholder);
+
+export default Placeholder;
 
 Placeholder.propTypes = {
   side: PropTypes.string.isRequired,

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
+import pureRender from '../utils/pureRender';
 
 import * as BuilderActions from '../actions/BuilderActions';
 
@@ -15,7 +16,7 @@ import FuseDial from '../components/FuseDial';
 @connect(state => ({
   builder: state.builder
 }))
-export default class Builder extends Component{
+class Builder extends Component {
   render() {
     const { dispatch, builder } = this.props;
 
@@ -46,12 +47,16 @@ export default class Builder extends Component{
         fuse = { builder.get('fuse')}
         {...bindActionCreators(BuilderActions, dispatch)} />
 
-        <footer><a href="http://www.qsensei.com/">Q-Sensei</a></footer>
+        <footer><a tabIndex="-1" href="http://www.qsensei.com/">Q-Sensei</a></footer>
 
       </div>
     );
   }
 }
+
+pureRender(Builder);
+
+export default Builder;
 
 Builder.propTypes = {
   dispatch: PropTypes.func,

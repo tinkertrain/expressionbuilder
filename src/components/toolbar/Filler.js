@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Map } from 'immutable';
+import pureRender from '../../utils/pureRender';
 import { isCanvasComplete, expressionsAreComplete } from '../../utils/canvasUtils';
 
-export default class Filler {
+class Filler {
   render() {
     const { builder } = this.props;
     const canvas = builder.get('canvas');
@@ -31,6 +32,10 @@ export default class Filler {
     return complete || !empty || isRootAClause || expressionsComplete;
   }
 }
+
+pureRender(Filler);
+
+export default Filler;
 
 Filler.propTypes = {
   fillEmpty: PropTypes.func.isRequired,

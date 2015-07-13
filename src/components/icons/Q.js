@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
+import pureRender from '../../utils/pureRender';
 
-export default class Q {
+class Q {
   render() {
     const { id, color, width, height } = this.props;
 
@@ -20,6 +21,9 @@ export default class Q {
   }
 }
 
+pureRender(Q);
+
+export default Q;
 Q.propTypes = {
   id: PropTypes.string.isRequired,
   width: PropTypes.string.isRequired,

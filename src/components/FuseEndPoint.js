@@ -1,8 +1,9 @@
 import R from 'ramda';
 import { Map } from 'immutable';
 import React, { Component, PropTypes } from 'react';
+import pureRender from '../utils/pureRender';
 
-export default class FuseEndPoint extends Component {
+class FuseEndPoint extends Component {
   render() {
     const { fuse } = this.props;
     let endPoint = fuse.get('endPoint') && !this.state.editMode ?
@@ -60,6 +61,10 @@ export default class FuseEndPoint extends Component {
     this.setState({ editMode: true });
   }
 }
+
+pureRender(FuseEndPoint);
+
+export default FuseEndPoint;
 
 FuseEndPoint.propTypes = {
   fuse: PropTypes.instanceOf(Map).isRequired,

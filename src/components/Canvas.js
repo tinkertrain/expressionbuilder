@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react';
 import { DropTarget } from 'react-dnd';
 import DnDTypes from '../constants/DnDTypes';
 import classNames from 'classnames';
-
+import pureRender from '../utils/pureRender';
 import Clause from './expression/Clause';
 import Expression from './expression/Expression';
 
@@ -24,7 +24,7 @@ let canvasTarget = {
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop()
 }))
-export default class Canvas {
+class Canvas {
   render() {
     const { builder } = this.props;
     const { connectDropTarget, isOver, canDrop, setClauseOperator, setClauseFacet, setClauseValue, removeExpression } = this.props;
@@ -71,6 +71,10 @@ export default class Canvas {
     );
   }
 }
+
+pureRender(Canvas);
+
+export default Canvas;
 
 Canvas.propTypes = {
   builder: PropTypes.instanceOf(Map).isRequired,

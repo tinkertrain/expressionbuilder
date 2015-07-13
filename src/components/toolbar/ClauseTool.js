@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 import React, { PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import DnDTypes from '../../constants/DnDTypes';
+import pureRender from '../../utils/pureRender';
 
 let clauseToolSource = {
   beginDrag() {
@@ -40,7 +41,7 @@ let clauseToolSource = {
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
-export default class ClauseTool {
+class ClauseTool {
   render() {
     const { isDragging, connectDragSource } = this.props;
 
@@ -49,6 +50,10 @@ export default class ClauseTool {
     );
   }
 }
+
+pureRender(ClauseTool);
+
+export default ClauseTool;
 
 ClauseTool.propTypes = {
   isDragging: PropTypes.func,

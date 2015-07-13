@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
+import pureRender from '../../utils/pureRender';
 
-export default class And {
+class And {
   render() {
     const { id, color, width, height } = this.props;
 
@@ -19,6 +20,10 @@ export default class And {
     );
   }
 }
+
+pureRender(And);
+
+export default And;
 
 And.propTypes = {
   id: PropTypes.string.isRequired,

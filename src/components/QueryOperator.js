@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
+import pureRender from '../utils/pureRender';
 
-export default class QueryOperator {
+class QueryOperator {
   render() {
     const { expression } = this.props;
 
@@ -21,6 +22,10 @@ export default class QueryOperator {
     );
   }
 }
+
+pureRender(QueryOperator);
+
+export default QueryOperator;
 
 QueryOperator.propTypes = {
   expression: PropTypes.object

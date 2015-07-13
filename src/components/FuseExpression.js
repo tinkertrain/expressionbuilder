@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
+import pureRender from '../utils/pureRender';
 
-export default class FuseExpression {
+class FuseExpression {
   render() {
     const { expressionString } = this.props;
 
@@ -13,8 +14,11 @@ export default class FuseExpression {
       </div>
     );
   }
-
 }
+
+pureRender(FuseExpression);
+
+export default FuseExpression;
 
 FuseExpression.propTypes = {
   expressionString: PropTypes.string.isRequired

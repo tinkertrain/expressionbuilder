@@ -171,9 +171,10 @@ export default function builder(state = initialState, action) {
       });
 
     case aT.SET_FUSE_ENDPOINT:
+      let url = action.url.match(/\/$/) ? action.url : `${action.url}/`;
       return Map({
         canvas: canvas,
-        fuse: fuse.set('endPoint', action.url)
+        fuse: fuse.set('endPoint', url)
       });
 
     case aT.DIAL_FUSE:

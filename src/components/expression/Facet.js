@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
+import pureRender from '../../utils/pureRender';
 
-export default class Facet extends Component {
+class Facet extends Component {
   render() {
     const { expression } = this.props;
 
@@ -28,12 +29,6 @@ export default class Facet extends Component {
 
   state = { editMode: true }
 
-  componentDidMount() {
-    if (this.refs.facetName) {
-      React.findDOMNode(this.refs.facetName).focus();
-    }
-  }
-
   componentDidUpdate() {
     if (this.refs.facetName) {
       React.findDOMNode(this.refs.facetName).select();
@@ -46,9 +41,10 @@ export default class Facet extends Component {
       const { expression, setClauseFacet } = this.props;
       let facet = React.findDOMNode(this.refs.facetName).value;
 
-      setClauseFacet(expression.set('facet', facet));
-
-      this.setState({ editMode: false});
+      if (facet) {
+        setClauseFacet(expression.set('facet', facet));
+        this.setState({ editMode: false });
+      }
     }
   }
 
@@ -57,15 +53,20 @@ export default class Facet extends Component {
     const { expression, setClauseFacet } = this.props;
     let facet = React.findDOMNode(this.refs.facetName).value;
 
-    setClauseFacet(expression.set('facet', facet));
-
-    this.setState({ editMode: false});
+    if (facet) {
+      setClauseFacet(expression.set('facet', facet));
+      this.setState({ editMode: false });
+    }
   }
 
   editFacet() {
     this.setState({ editMode: true});
   }
 }
+
+pureRender(Facet);
+
+export default Facet;
 
 Facet.propTypes = {
   expression: PropTypes.instanceOf(Map).isRequired

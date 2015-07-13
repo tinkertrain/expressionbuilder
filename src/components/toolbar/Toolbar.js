@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Map } from 'immutable';
+import pureRender from '../../utils/pureRender';
 
 import OperatorTool from './OperatorTool';
 import ClauseTool from './ClauseTool';
 import Filler from './Filler';
 
-export default class Toolbar {
+class Toolbar {
   render() {
     const { fillEmpty, builder } = this.props;
     const operators = ['and', 'or', 'andNot', 'orNot'];
@@ -27,6 +28,10 @@ export default class Toolbar {
     );
   }
 }
+
+pureRender(Toolbar);
+
+export default Toolbar;
 
 Toolbar.propTypes = {
   fillEmpty: PropTypes.func,
