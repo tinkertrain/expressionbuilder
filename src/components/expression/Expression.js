@@ -92,7 +92,9 @@ class Expression extends Component {
         })
       }>
         { leftSide }
-        <ExpressionOperator operator = { expression.get('operator') } />
+        <ExpressionOperator
+        expression = { expression }
+        {...bindActionCreators(BuilderActions, dispatch)}/>
         { rightSide }
         <div
         className = "Expression-RemoverWrapper"

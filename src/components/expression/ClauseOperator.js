@@ -23,15 +23,13 @@ class ClauseOperator extends Component {
     return (
       <div
       className="Clause-Operator"
-      onClick={ this.toggleOperators.bind(this) }
-      >
+      onClick={ this.toggleOperators.bind(this) }>
         <div>{ symbols[expression.get('clauseOperator')] }</div>
         <ul className={
           classNames({
             ['Clause-Operator-List']: true,
             show: this.state.showOperators
-          })
-          }>
+          })}>
           { symbolList }
         </ul>
       </div>
@@ -41,6 +39,7 @@ class ClauseOperator extends Component {
   state = { showOperators: false }
 
   setOperator(operator) {
+    const { expression, setClauseOperator } = this.props;
     const symbols = {
       ['=']: 'equalTo',
       ['>']: 'greaterThan',
@@ -49,7 +48,8 @@ class ClauseOperator extends Component {
       ['<=']: 'lowerOrEqualTo',
       ['!=']: 'not'
     };
-    this.props.setClauseOperator(this.props.expression.set('clauseOperator', symbols[operator]));
+
+    setClauseOperator(expression.set('clauseOperator', symbols[operator]));
   }
 
   toggleOperators() {

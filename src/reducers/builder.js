@@ -26,13 +26,13 @@ export default function builder(state = initialState, action) {
         });
         newCanvas = updatedParent.push(expression);
       }
-    else {
-      newCanvas = canvas.push(expression);
-    }
+      else {
+        newCanvas = canvas.push(expression);
+      }
 
       return Map({
         canvas: newCanvas,
-        fuse: state.get('fuse')
+        fuse: fuse
       });
 
     case aT.REMOVE_EXPRESSION:
@@ -57,9 +57,23 @@ export default function builder(state = initialState, action) {
 
         newCanvas = updatedParent.filterNot((exp) => children.indexOf(exp.get('id')) !== -1);
       }
-    else {
-      newCanvas = List();
-    }
+      else {
+        newCanvas = List();
+      }
+      newFuse = saveExpression(newCanvas, fuse);
+
+      return Map({
+        canvas: newCanvas,
+        fuse: newFuse.get('expression') !== fuse.get('expression') ?
+          newFuse
+          .set('response', null)
+          .set('facets', null)
+          .set('contents', null) :
+          newFuse
+      });
+
+    case aT.CHANGE_EXPRESSION_OPERATOR:
+      newCanvas = mapUpdate('operator', expression, canvas);
       newFuse = saveExpression(newCanvas, fuse);
 
       return Map({

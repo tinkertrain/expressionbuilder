@@ -490,6 +490,7 @@ body {
   box-shadow: 1px 1px 0 darken(lightsalmon, 28%);
 }
 .Expression-operator {
+  position: relative;
   display: inline-block;
   vertical-align: middle;
   height: 30px;
@@ -500,6 +501,50 @@ body {
   font-family: Consolas, Monaco, monospace;
   font-size: 16px;
   font-weight: normal;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(ivory, 0.15);
+  }
+}
+.Expression-operator-List {
+  display: none;
+}
+.Expression-operator-List.show {
+  display: block;
+  z-index: 110;
+  position: absolute;
+  top: 30px;
+  left: 1px;
+  margin: 0;
+  padding: 0;
+  div {
+    cursor: pointer;
+    width: 29px;
+    height: 30px;
+    border-bottom: 1px solid darken(lightsalmon, 5%);
+    font-family: monospace;
+    cursor: pointer;
+    background-color: lighten(lightsalmon, 15%);
+    background-image: radial-gradient(
+      circle at center center,
+      lighten(lightsalmon, 3%) 50%,
+      lighten(lightsalmon, 0%) 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    &:hover {
+      background-color: lighten(lightsalmon, 5%);
+      background-image: radial-gradient(
+        circle at center center,
+        darken(lightsalmon, 3%) 50%,
+        darken(lightsalmon, 7%) 100%);
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
 }
 .Expression-RemoverWrapper {
   position: absolute;
@@ -529,6 +574,13 @@ body {
   width: 70px;
   height: 30px;
   background-color: ivory;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(ivory, 0.85),
+    rgba(ivory, 0.85) 2px,
+    rgba(lighten(lightsteelblue, 15%), 0.75) 2px,
+    rgba(lighten(lightsteelblue, 15%), 0.75) 4px
+  );
   border: 1px dashed desaturate(darken(lightsteelblue, 35%), 20%);
 }
 .Placeholder.canDrop {

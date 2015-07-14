@@ -16,6 +16,13 @@ export function removeExpression(expression) {
   };
 }
 
+export function changeExpressionOperator(expression) {
+  return {
+    type: aT.CHANGE_EXPRESSION_OPERATOR,
+    expression
+  };
+}
+
 export function fillEmpty(canvas) {
   return {
     type: aT.FILL_EMPTY,
