@@ -1,10 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
+import Awesomplete from 'awesomplete';
+import '../../../node_modules/awesomplete/awesomplete.css';
 import pureRender from '../../utils/pureRender';
 
 class Facet extends Component {
   render() {
-    const { expression } = this.props;
+    const { expression, facetList } = this.props;
 
     let facet = expression.get('facet') && !this.state.editMode ?
       (
@@ -29,10 +31,52 @@ class Facet extends Component {
 
   state = { editMode: true }
 
-  componentDidUpdate() {
+  componentDidMount() {
+    const { expression, facetList, setClauseFacet } = this.props;
+
     if (this.refs.facetName) {
-      React.findDOMNode(this.refs.facetName).select();
-      React.findDOMNode(this.refs.facetName).focus();
+      let input = React.findDOMNode(this.refs.facetName);
+      let awesomplete;
+
+      if (facetList && facetList.length) {
+        awesomplete = new Awesomplete(input, {
+          list: facetList,
+          autoFirst: true
+        });
+
+        input.addEventListener('awesomplete-selectcomplete', (e) => {
+          setClauseFacet(expression.set('facet', e.target.value));
+          this.setState({ editMode: false });
+        });
+      }
+
+
+      input.select();
+      input.focus();
+    }
+  }
+
+  componentDidUpdate() {
+    const { expression, facetList, setClauseFacet } = this.props;
+
+    if (this.refs.facetName) {
+      let input = React.findDOMNode(this.refs.facetName);
+      let awesomplete;
+
+      if (facetList && facetList.length) {
+        awesomplete = new Awesomplete(input, {
+          list: facetList,
+          autoFirst: true
+        });
+
+        input.addEventListener('awesomplete-selectcomplete', (e) => {
+          setClauseFacet(expression.set('facet', e.target.value));
+          this.setState({ editMode: false });
+        });
+      }
+
+      input.select();
+      input.focus();
     }
   }
 
@@ -69,5 +113,6 @@ pureRender(Facet);
 export default Facet;
 
 Facet.propTypes = {
-  expression: PropTypes.instanceOf(Map).isRequired
+  expression: PropTypes.instanceOf(Map).isRequired,
+  facetList: PropTypes.array
 };

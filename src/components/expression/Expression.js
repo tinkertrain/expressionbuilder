@@ -31,6 +31,7 @@ class Expression extends Component {
       if (leftExpression.get('type') === 'clause') {
         leftSide = (
           <Clause
+          facetList = { builder.get('fuse').get('facetList') }
           expression = { leftExpression }
           {...bindActionCreators(BuilderActions, dispatch)} />
         );
@@ -60,6 +61,7 @@ class Expression extends Component {
       if (rightExpression.get('type') === 'clause') {
         rightSide = (
           <Clause
+          facetList = { builder.get('fuse').get('facetList') }
           expression = { rightExpression }
           {...bindActionCreators(BuilderActions, dispatch)} />
         );

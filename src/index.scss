@@ -652,6 +652,11 @@ body {
   background-color: papayawhip;
   cursor: pointer;
   border-radius: 2px 0 0 2px;
+  text-align: left;
+  text-indent: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .Clause-Value {
   display: inline-block;
@@ -985,4 +990,13 @@ footer {
 }
 input:focus {
   outline: 2px solid papayawhip;
+}
+.AutocompleteNotification {
+  font-size: 10px;
+  text-align: right;
+  width: 90%;
+  max-width: 900px;
+  margin: -10px auto 5px;
+  color: lighten(lightsteelblue, 5%);
+  font-family: Consolas, Monaco, monospace;
 }

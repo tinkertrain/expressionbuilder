@@ -52,24 +52,34 @@ export function setClauseOperator(expression) {
 }
 
 export function setFuseEndPoint(url) {
+  let fuseUrl = url.match(/\/$/) ? url : `${url}/`;
   return (dispatch) => {
-    request(url)
+    request(`${fuseUrl}facets`)
     .then((res) => {
-      if (res.body.facets) {
+      if (res.body) {
         return dispatch({
           type: aT.SET_FUSE_ENDPOINT,
-          url: url
+          response: {
+            url: fuseUrl,
+            facetList: R.pluck('name', res.body.items)
+          }
         });
       }
       return dispatch({
         type: aT.SET_FUSE_ENDPOINT,
-        url: null
+        response: {
+          url: null,
+          facetList: null
+        }
       });
     })
     .catch(() => {
       return dispatch({
         type: aT.SET_FUSE_ENDPOINT,
-        url: null
+        response: {
+          url: null,
+          facetList: null
+        }
       });
     });
   };

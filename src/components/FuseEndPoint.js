@@ -50,7 +50,7 @@ class FuseEndPoint extends Component {
     const { setFuseEndPoint, fuse } = this.props;
     let endpoint = React.findDOMNode(this.refs.endpoint).value;
 
-    if (fuse.get('endPoint') || fuse.get('endPoint') !== endpoint) {
+    if (!fuse.get('endPoint') || fuse.get('endPoint') !== endpoint) {
       setFuseEndPoint(endpoint);
     }
 

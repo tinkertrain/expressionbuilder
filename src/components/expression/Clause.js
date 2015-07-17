@@ -10,7 +10,7 @@ import Remover from './Remover';
 
 class Clause extends Component {
   render() {
-    const { expression, setClauseFacet, setClauseValue, setClauseOperator, removeExpression } = this.props;
+    const { expression, facetList, setClauseFacet, setClauseValue, setClauseOperator, removeExpression } = this.props;
 
     return (
       <div
@@ -21,6 +21,7 @@ class Clause extends Component {
         }) }>
         <Facet
         expression = { expression }
+        facetList = { facetList }
         setClauseFacet = { setClauseFacet } />
 
         <ClauseOperator
@@ -57,6 +58,7 @@ export default Clause;
 
 Clause.propTypes = {
   expression: PropTypes.instanceOf(Map).isRequired,
+  facetList: PropTypes.array,
   setClauseFacet: PropTypes.func,
   setClauseOperator: PropTypes.func,
   setClauseValue: PropTypes.func,

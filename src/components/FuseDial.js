@@ -17,7 +17,7 @@ class FuseDial extends Component {
           <button
           disabled = { this.state.showing.facets }
           className = { classNames({
-            active: this.state.showing.facets
+            active: this.state.showing.facets && fuse.get('facets')
           }) }
           onClick = {
             this.callResponses.bind(this, 'facets')
@@ -26,7 +26,7 @@ class FuseDial extends Component {
           <button
           disabled = { this.state.showing.contents }
           className = { classNames({
-            active: this.state.showing.contents
+            active: this.state.showing.contents && fuse.get('contents')
           }) }
           onClick = {
             this.callResponses.bind(this, 'contents')
@@ -64,7 +64,7 @@ class FuseDial extends Component {
                { !!fuse.get('response') ? 'Fuse Called' : 'Call Fuse' }
              </button>
             ) :
-          <span className="FuseExpression-setEndPoint">Set a valid Fuse URL to see a response made with your expression</span>
+          <span className="FuseExpression-setEndPoint">Set a valid Fuse URL and build an expression to see a response made with it</span>
 
         }
 

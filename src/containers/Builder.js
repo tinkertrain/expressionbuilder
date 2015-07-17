@@ -40,6 +40,11 @@ class Builder extends Component {
         builder = { builder }
         {...bindActionCreators(BuilderActions, dispatch)} />
 
+        {
+          builder.get('fuse').get('facetList') ?
+          <div className="AutocompleteNotification">Autocomplete for facets active!</div> : null
+        }
+
         <FuseExpression
         expressionString = { builder.get('fuse').get('expression') } />
 

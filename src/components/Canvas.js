@@ -44,6 +44,7 @@ class Canvas {
             setClauseFacet = { setClauseFacet }
             setClauseOperator = { setClauseOperator }
             setClauseValue = { setClauseValue }
+            facetList = { builder.get('fuse').get('facetList') }
             expression = { exp } />
           );
         }

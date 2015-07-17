@@ -17,200 +17,201 @@ export default function builder(state = initialState, action) {
 
   switch (action.type) {
     case aT.ADD_EXPRESSION:
-      if (canvas.size !== 0) {
-        let updatedParent = canvas.map((exp) => {
-          if (exp.get('id') === expression.get('parent')) {
-            return exp.set(expression.get('side'), expression.get('id'));
-          }
-          return exp;
-        });
-        newCanvas = updatedParent.push(expression);
-      }
-      else {
-        newCanvas = canvas.push(expression);
-      }
-
-      return Map({
-        canvas: newCanvas,
-        fuse: fuse
+    if (canvas.size !== 0) {
+      let updatedParent = canvas.map((exp) => {
+        if (exp.get('id') === expression.get('parent')) {
+          return exp.set(expression.get('side'), expression.get('id'));
+        }
+        return exp;
       });
+      newCanvas = updatedParent.push(expression);
+    }
+    else {
+      newCanvas = canvas.push(expression);
+    }
+
+    return Map({
+      canvas: newCanvas,
+      fuse: fuse
+    });
 
     case aT.REMOVE_EXPRESSION:
-      let parentIndex = canvas.findIndex((exp) => exp.get('id') === expression.get('parent'));
+    let parentIndex = canvas.findIndex((exp) => exp.get('id') === expression.get('parent'));
 
-      if (parentIndex > -1) {
-        let children = canvas.reduce((accum, exp) => {
-          for (let i = 0; i < accum.length; i++) {
-            if (exp.get('parent') === accum[i]) {
-              return accum.concat(exp.get('id'));
-            }
+    if (parentIndex > -1) {
+      let children = canvas.reduce((accum, exp) => {
+        for (let i = 0; i < accum.length; i++) {
+          if (exp.get('parent') === accum[i]) {
+            return accum.concat(exp.get('id'));
           }
-          return accum;
-        }, [expression.get('id')]);
+        }
+        return accum;
+      }, [expression.get('id')]);
 
-        let updatedParent = canvas.map((exp) => {
-          if (exp.get('id') === expression.get('parent')) {
-            return exp.set(expression.get('side'), null);
-          }
-          return exp;
-        });
-
-        newCanvas = updatedParent.filterNot((exp) => children.indexOf(exp.get('id')) !== -1);
-      }
-      else {
-        newCanvas = List();
-      }
-      newFuse = saveExpression(newCanvas, fuse);
-
-      return Map({
-        canvas: newCanvas,
-        fuse: newFuse.get('expression') !== fuse.get('expression') ?
-          newFuse
-          .set('response', null)
-          .set('facets', null)
-          .set('contents', null) :
-          newFuse
-      });
-
-    case aT.CHANGE_EXPRESSION_OPERATOR:
-      newCanvas = mapUpdate('operator', expression, canvas);
-      newFuse = saveExpression(newCanvas, fuse);
-
-      return Map({
-        canvas: newCanvas,
-        fuse: newFuse.get('expression') !== fuse.get('expression') ?
-          newFuse
-          .set('response', null)
-          .set('facets', null)
-          .set('contents', null) :
-          newFuse
-      });
-
-    case aT.FILL_EMPTY:
-      let generateId = R.compose(
-        R.add(1),
-        R.max
-      );
-      let idList = canvas.map((exp) => exp.get('id')).toArray();
-      let clausesToAdd = [];
-
-      newCanvas = canvas.map((exp) => {
-        if (exp.get('type') === 'expression') {
-          let leftId;
-          let rightId;
-
-          if (!exp.get('left')) {
-            leftId = generateId(idList);
-            clausesToAdd.push(Map({
-              type: 'clause',
-              facet: null,
-              value: null,
-              clauseOperator: 'equalTo',
-              parent: exp.get('id'),
-              side: 'left',
-              id: leftId
-            }));
-            idList.push(leftId);
-          }
-          else {
-            leftId = exp.get('left');
-          }
-          if (!exp.get('right')) {
-            rightId = generateId(idList);
-            clausesToAdd.push(Map({
-              type: 'clause',
-              facet: null,
-              value: null,
-              clauseOperator: 'equalTo',
-              parent: exp.get('id'),
-              side: 'right',
-              id: rightId
-            }));
-            idList.push(rightId);
-          }
-          else {
-            rightId = exp.get('right');
-          }
-
-          return exp.set('left', leftId).set('right', rightId);
+      let updatedParent = canvas.map((exp) => {
+        if (exp.get('id') === expression.get('parent')) {
+          return exp.set(expression.get('side'), null);
         }
         return exp;
       });
 
-      return Map({
-        canvas: newCanvas.concat(List(clausesToAdd)),
-        fuse: fuse
-      });
+      newCanvas = updatedParent.filterNot((exp) => children.indexOf(exp.get('id')) !== -1);
+    }
+    else {
+      newCanvas = List();
+    }
+    newFuse = saveExpression(newCanvas, fuse);
+
+    return Map({
+      canvas: newCanvas,
+      fuse: newFuse.get('expression') !== fuse.get('expression') ?
+        newFuse
+        .set('response', null)
+        .set('facets', null)
+        .set('contents', null) :
+        newFuse
+    });
+
+    case aT.CHANGE_EXPRESSION_OPERATOR:
+    newCanvas = mapUpdate('operator', expression, canvas);
+    newFuse = saveExpression(newCanvas, fuse);
+
+    return Map({
+      canvas: newCanvas,
+      fuse: newFuse.get('expression') !== fuse.get('expression') ?
+        newFuse
+        .set('response', null)
+        .set('facets', null)
+        .set('contents', null) :
+        newFuse
+    });
+
+    case aT.FILL_EMPTY:
+    let generateId = R.compose(
+      R.add(1),
+      R.max
+    );
+    let idList = canvas.map((exp) => exp.get('id')).toArray();
+    let clausesToAdd = [];
+
+    newCanvas = canvas.map((exp) => {
+      if (exp.get('type') === 'expression') {
+        let leftId;
+        let rightId;
+
+        if (!exp.get('left')) {
+          leftId = generateId(idList);
+          clausesToAdd.push(Map({
+            type: 'clause',
+            facet: null,
+            value: null,
+            clauseOperator: 'equalTo',
+            parent: exp.get('id'),
+            side: 'left',
+            id: leftId
+          }));
+          idList.push(leftId);
+        }
+        else {
+          leftId = exp.get('left');
+        }
+        if (!exp.get('right')) {
+          rightId = generateId(idList);
+          clausesToAdd.push(Map({
+            type: 'clause',
+            facet: null,
+            value: null,
+            clauseOperator: 'equalTo',
+            parent: exp.get('id'),
+            side: 'right',
+            id: rightId
+          }));
+          idList.push(rightId);
+        }
+        else {
+          rightId = exp.get('right');
+        }
+
+        return exp.set('left', leftId).set('right', rightId);
+      }
+      return exp;
+    });
+
+    return Map({
+      canvas: newCanvas.concat(List(clausesToAdd)),
+      fuse: fuse
+    });
 
     case aT.SET_CLAUSE_FACET:
-      newCanvas = mapUpdate('facet', expression, canvas);
-      newFuse = saveExpression(newCanvas, fuse);
+    newCanvas = mapUpdate('facet', expression, canvas);
+    newFuse = saveExpression(newCanvas, fuse);
 
-      return Map({
-        canvas: newCanvas,
-        fuse: newFuse.get('expression') !== fuse.get('expression') ?
-          newFuse
-          .set('response', null)
-          .set('facets', null)
-          .set('contents', null) :
-          newFuse
-      });
+    return Map({
+      canvas: newCanvas,
+      fuse: newFuse.get('expression') !== fuse.get('expression') ?
+        newFuse
+        .set('response', null)
+        .set('facets', null)
+        .set('contents', null) :
+        newFuse
+    });
 
     case aT.SET_CLAUSE_VALUE:
-      newCanvas = mapUpdate('value', expression, canvas);
-      newFuse = saveExpression(newCanvas, fuse);
+    newCanvas = mapUpdate('value', expression, canvas);
+    newFuse = saveExpression(newCanvas, fuse);
 
-      return Map({
-        canvas: newCanvas,
-        fuse: newFuse.get('expression') !== fuse.get('expression') ?
-          newFuse
-          .set('response', null)
-          .set('facets', null)
-          .set('contents', null) :
-          newFuse
-      });
+    return Map({
+      canvas: newCanvas,
+      fuse: newFuse.get('expression') !== fuse.get('expression') ?
+        newFuse
+        .set('response', null)
+        .set('facets', null)
+        .set('contents', null) :
+        newFuse
+    });
 
     case aT.SET_CLAUSE_OPERATOR:
-      newCanvas = mapUpdate('clauseOperator', expression, canvas);
-      newFuse = saveExpression(newCanvas, fuse);
+    newCanvas = mapUpdate('clauseOperator', expression, canvas);
+    newFuse = saveExpression(newCanvas, fuse);
 
-      return Map({
-        canvas: newCanvas,
-        fuse: newFuse.get('expression') !== fuse.get('expression') ?
-          newFuse
-          .set('response', null)
-          .set('facets', null)
-          .set('contents', null) :
-          newFuse
-      });
+    return Map({
+      canvas: newCanvas,
+      fuse: newFuse.get('expression') !== fuse.get('expression') ?
+        newFuse
+        .set('response', null)
+        .set('facets', null)
+        .set('contents', null) :
+        newFuse
+    });
 
     case aT.SET_FUSE_ENDPOINT:
-      let url = action.url.match(/\/$/) ? action.url : `${action.url}/`;
-      return Map({
-        canvas: canvas,
-        fuse: fuse.set('endPoint', url)
-      });
+    return Map({
+      canvas: canvas,
+      fuse: fuse
+        .set('endPoint', action.response.url)
+        .set('facetList', action.response.facetList)
+    });
 
     case aT.DIAL_FUSE:
-      return Map({
-        canvas: canvas,
-        fuse: fuse.set('response', action.response)
-      });
+    return Map({
+      canvas: canvas,
+      fuse: fuse.set('response', action.response)
+    });
 
     case aT.GET_FACETS:
-      return Map({
-        canvas: canvas,
-        fuse: fuse.set('facets', action.items)
-      });
+    return Map({
+      canvas: canvas,
+      fuse: fuse.set('facets', action.items)
+    });
 
     case aT.GET_CONTENTS:
-      return Map({
-        canvas: canvas,
-        fuse: fuse.set('contents', action.items)
-      });
+    return Map({
+      canvas: canvas,
+      fuse: fuse.set('contents', action.items)
+    });
 
     default:
-      return state;
+    return state;
   }
 }
 
