@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import pureRender from '../utils/pureRender';
-import { createContentsQuery } from 'queryapi/queryParameters';
+import { createContentsQuery } from 'fuselink/queryAPI/queryParameters';
 
 export default class ContentsCaller extends Component {
   render() {

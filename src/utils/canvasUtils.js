@@ -1,5 +1,5 @@
-import { clauseOperators } from 'queryapi';
-import { queryOperators } from 'queryapi';
+import { clauseOperators } from 'fuselink/queryAPI';
+import { queryOperators } from 'fuselink/queryAPI';
 
 export function isCanvasComplete(canvas) {
   let clauses = canvas

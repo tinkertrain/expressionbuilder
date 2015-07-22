@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Awesomplete from 'awesomplete';
 
 import pureRender from '../utils/pureRender';
-import { createFacetsQuery } from 'queryapi/queryParameters';
+import { createFacetsQuery } from 'fuselink/queryAPI/queryParameters';
 
 export default class FacetsCaller extends Component {
   componentDidMount() {
