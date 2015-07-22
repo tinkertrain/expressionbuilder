@@ -36,20 +36,20 @@ class Facet extends Component {
 
     if (this.refs.facetName) {
       let input = React.findDOMNode(this.refs.facetName);
-      let awesomplete;
 
       if (facetList && facetList.length) {
-        awesomplete = new Awesomplete(input, {
+        /* eslint-disable no-unused-vars */
+        let awesomplete = new Awesomplete(input, {
           list: facetList,
           autoFirst: true
         });
+        /* eslint-enable no-unused-vars */
 
         input.addEventListener('awesomplete-selectcomplete', (e) => {
           setClauseFacet(expression.set('facet', e.target.value));
           this.setState({ editMode: false });
         });
       }
-
 
       input.select();
       input.focus();
@@ -61,13 +61,14 @@ class Facet extends Component {
 
     if (this.refs.facetName) {
       let input = React.findDOMNode(this.refs.facetName);
-      let awesomplete;
 
       if (facetList && facetList.length) {
-        awesomplete = new Awesomplete(input, {
+        /* eslint-disable no-unused-vars */
+        let awesomplete = new Awesomplete(input, {
           list: facetList,
           autoFirst: true
         });
+        /* eslint-enable no-unused-vars */
 
         input.addEventListener('awesomplete-selectcomplete', (e) => {
           setClauseFacet(expression.set('facet', e.target.value));

@@ -5,7 +5,7 @@ import * as aT from '../constants/ActionTypes';
 
 let initialState = Map({
   canvas: List(),
-  fuse: Map({ expression: 'incomplete'})
+  fuse: Map({ expression: 'incomplete' })
 });
 
 export default function builder(state = initialState, action) {
@@ -201,13 +201,17 @@ export default function builder(state = initialState, action) {
     case aT.GET_FACETS:
     return Map({
       canvas: canvas,
-      fuse: fuse.set('facets', action.items)
+      fuse: fuse
+            .set('facets', List(action.payload.items))
+            .set('facetsQParams', Map(action.payload.qParams))
     });
 
     case aT.GET_CONTENTS:
     return Map({
       canvas: canvas,
-      fuse: fuse.set('contents', action.items)
+      fuse: fuse
+            .set('contents', List(action.payload.items))
+            .set('contentsQParams', Map(action.payload.qParams))
     });
 
     default:

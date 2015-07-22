@@ -810,7 +810,6 @@ body {
   margin: 20px auto;
 }
 .FuseDial-Caller.FuseDial-Caller--clicked {
-  border-radius: 8px 8px 0 0;
   opacity: 0.5;
 }
 .FuseDial-Caller {
@@ -820,6 +819,7 @@ body {
   height: 50px;
   line-height: 50px;
   padding: 0 10px;
+  margin-bottom: 20px;
   background-color: darken(desaturate(lightseagreen, 20%), 10%);
   background-image: radial-gradient(
     ellipse at 15px 13px,
@@ -828,8 +828,6 @@ body {
 
   background-repeat: no-repeat;
   background-size: cover;
-  display: inline-block;
-  vertical-align: middle;
   text-align: center;
   color: lighten(lightsteelblue, 10%);
   font-family: 'Source Code Pro', monospace;
@@ -837,41 +835,180 @@ body {
   box-shadow: inset 1px 1px 1px lighten(desaturate(lightseagreen, 20%), 5%),
               1px 1px 1px darken(desaturate(lightseagreen, 20%), 20%);
 }
-.FuseDial-Response {
-  margin: 0 0 20px;
-  button {
-    border: 0;
-    width: 75px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 3px;
-    padding: 0 10px;
-    background-color: darken(lightseagreen, 30%);
+.FuseDial-Response-Facets {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 20px;
+}
+.FuseDial-Response-Contents {
+  display: inline-block;
+  vertical-align: middle;
+}
+.FuseDial-Response-Facets-Conf {
+  border: 0;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 3px 0 0 3px;
+  background-color: darken(gainsboro, 30%);
+  background-image: radial-gradient(
+    ellipse at 15px 13px,
+    darken(gainsboro, 16%) 24%,
+    darken(gainsboro, 20%) 100%);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-right: 0px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  color: lighten(lightsteelblue, 10%);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 12px;
+  box-shadow: inset 1px 1px 1px darken(gainsboro, 15%),
+              1px 1px 1px darken(gainsboro, 30%);
+
+  &.active {
+    background-color: darken(gainsboro, 40%);
     background-image: radial-gradient(
       ellipse at 15px 13px,
-      darken(lightseagreen, 16%) 24%,
-      darken(lightseagreen, 20%) 100%);
+      darken(gainsboro, 26%) 24%,
+      darken(gainsboro, 30%) 100%);
+    box-shadow: inset 1px 1px 1px darken(gainsboro, 25%),
+                1px 1px 1px darken(gainsboro, 40%);
+  }
 
-    background-repeat: no-repeat;
-    background-size: cover;
-    margin-right: 0px;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
-    color: lighten(lightsteelblue, 10%);
-    font-family: 'Source Code Pro', monospace;
-    font-size: 12px;
-    box-shadow: inset 1px 1px 1px darken(lightseagreen, 15%),
-                1px 1px 1px darken(lightseagreen, 30%);
+  svg {
+    position: relative;
+    top: 3px;
+  }
+}
+.Fuse-Response-Facets-Form {
+  margin-right: 40px;
+}
+.Fuse-Response-Facets-Form,
+.Fuse-Response-Contents-Form {
+  background-color: rgba(lighten(lightsteelblue, 0%), 0.35);
+  padding: 15px;
+  border-radius: 3px;
+  width: 250px;
+  margin-bottom: 5px;
+  display: inline-block;
+  vertical-align: top;
 
-    &:first-child {
-      border-radius: 0 0 0 8px;
-    }
+  h4 {
+    margin: 0 0 10px 0;
+    padding: 0;
+    font-family: futura, sans-serif;
+    font-size: 14px;
+    color: lighten(lightsteelblue, 7%);
+    font-weight: normal;
+  }
+
+  h5 {
+    margin: 0 0 10px 0;
+    padding: 0 0 3px 0;
+    font-family: futura, sans-serif;
+    font-size: 14px;
+    color: darken(slategray, 20%);
+    font-weight: normal;
+    text-align: left;
+    border-bottom: 1px solid rgba(darken(slategray, 20%), 0.35);
+  }
+  p {
+    text-align: left;
+    font-family: futura, sans-serif;
+    color: darken(slategray, 15%);
+    font-size: 10px;
+    margin: 0 0 5px 0;
+    padding: 0;
+  }
+  form > div {
+    margin-bottom: 10px;
+    height: auto;
+
     &:last-child {
-      border-radius: 0 0 8px 0;
+      margin-bottom: 0;
     }
   }
-  button.active {
+  label {
+    font-size: 11px;
+    font-family: futura, sans-serif;
+    height: 20px;
+    line-height: 20px;
+    width: calc(100% - 60px);
+    display: inline-block;
+    vertical-align: middle;
+    float: left;
+    text-align: left;
+    color: darken(lightsteelblue, 50%);
+  }
+  input[type="text"] {
+    display: block;
+    vertical-align: middle;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 3px;
+    border: 0;
+    width: 100%;
+    font-size: 11px;
+    font-family: Consolas, Monaco, monospace;
+    background-color: rgba(#fff, 0.5);
+  }
+  input[type="number"] {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: right;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 3px;
+    border: 0;
+    width: 60px;
+    font-size: 11px;
+    font-family: Consolas, Monaco, monospace;
+    background-color: rgba(#fff, 0.5);
+  }
+  select {
+    height: 20px;
+    line-height: 20px;
+    padding: 0 3px;
+    border: 0;
+    width: 60px;
+    font-size: 11px;
+    font-family: Consolas, Monaco, monospace;
+    background-color: rgba(#fff, 0.5);
+  }
+  .awesomplete {
+    width: 100%;
+  }
+}
+.FuseDial-Response-Facets-Caller,
+.FuseDial-Response-Contents-Caller {
+  border: 0;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 3px;
+  padding: 0 10px;
+  background-color: darken(lightseagreen, 30%);
+  background-image: radial-gradient(
+    ellipse at 15px 13px,
+    darken(lightseagreen, 16%) 24%,
+    darken(lightseagreen, 20%) 100%);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-right: 0px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  color: lighten(lightsteelblue, 10%);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 12px;
+  box-shadow: inset 1px 1px 1px darken(lightseagreen, 15%),
+              1px 1px 1px darken(lightseagreen, 30%);
+
+  &.active {
     background-color: darken(lightseagreen, 40%);
     background-image: radial-gradient(
       ellipse at 15px 13px,
@@ -880,7 +1017,48 @@ body {
     box-shadow: inset 1px 1px 1px darken(lightseagreen, 25%),
                 1px 1px 1px darken(lightseagreen, 40%);
   }
+}
+.FuseDial-Response-Contents-Conf {
+  border: 0;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 3px 0 0 3px;
+  background-color: darken(gainsboro, 30%);
+  background-image: radial-gradient(
+    ellipse at 15px 13px,
+    darken(gainsboro, 16%) 24%,
+    darken(gainsboro, 20%) 100%);
 
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-right: 0px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  color: lighten(lightsteelblue, 10%);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 12px;
+  box-shadow: inset 1px 1px 1px darken(gainsboro, 15%),
+              1px 1px 1px darken(gainsboro, 30%);
+
+  &.active {
+    background-color: darken(gainsboro, 40%);
+    background-image: radial-gradient(
+      ellipse at 15px 13px,
+      darken(gainsboro, 26%) 24%,
+      darken(gainsboro, 30%) 100%);
+    box-shadow: inset 1px 1px 1px darken(gainsboro, 25%),
+                1px 1px 1px darken(gainsboro, 40%);
+  }
+
+  svg {
+    position: relative;
+    top: 3px;
+  }
+}
+.FuseDial-Response {
+  margin: 0 0 20px;
 }
 .FuseDial-Items {
   text-align: left;

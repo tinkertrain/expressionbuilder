@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Map } from 'immutable';
 import Prism from 'prismjs';
 import pureRender from '../utils/pureRender';
 import '../../node_modules/prismjs-okaidia-theme/prism-okaidia.css';
@@ -14,7 +15,7 @@ class ItemsRenderer {
     return (
       <pre className="FuseDial-Items">
         <code className="language-javascript" ref="items">
-          { items }
+          { JSON.stringify(items, null, 2) }
         </code>
       </pre>
     );
@@ -30,5 +31,5 @@ pureRender(ItemsRenderer);
 export default ItemsRenderer;
 
 ItemsRenderer.propTypes = {
-  items: PropTypes.string.isRequired
+  items: PropTypes.instanceOf(Map).isRequired
 };
