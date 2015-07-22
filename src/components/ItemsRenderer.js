@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Map } from 'immutable';
+import { List } from 'immutable';
 import Prism from 'prismjs';
 import pureRender from '../utils/pureRender';
 import '../../node_modules/prismjs-okaidia-theme/prism-okaidia.css';
@@ -31,5 +31,5 @@ pureRender(ItemsRenderer);
 export default ItemsRenderer;
 
 ItemsRenderer.propTypes = {
-  items: PropTypes.instanceOf(Map).isRequired
+  items: PropTypes.instanceOf(List).isRequired
 };
