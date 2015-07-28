@@ -6,7 +6,7 @@ import pureRender from '../../utils/pureRender';
 
 class Facet extends Component {
   render() {
-    const { expression, facetList } = this.props;
+    const { expression } = this.props;
 
     let facet = expression.get('facet') && !this.state.editMode ?
       (

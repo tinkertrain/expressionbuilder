@@ -14,7 +14,7 @@ class FuseDial {
     return (
       <div className="FuseDial">
         {
-          fuse.get('expression') !== 'incomplete' ?
+          fuse.get('expression') !== 'incomplete' && fuse.get('endPoint') ?
           (
             <div>
               <div>

@@ -1,4 +1,3 @@
-import R from 'ramda';
 import { Map } from 'immutable';
 import React, { PropTypes } from 'react';
 
@@ -23,11 +22,6 @@ let operandSource = {
     }
     let dropResult = monitor.getDropResult();
     const canvas = dropResult.builder.get('canvas');
-    let generateId = R.compose(
-      R.add(1),
-      R.max
-    );
-
     let idList = canvas.map((exp) => exp.get('id')).toArray();
 
     dropResult.addExpression(Map({
@@ -39,7 +33,7 @@ let operandSource = {
       side: dropResult.side || null,
       id: canvas.size === 0 ?
         0 :
-        generateId(idList)
+        Math.max(...idList) + 1
     }));
   }
 };
@@ -51,7 +45,7 @@ let operandSource = {
 class OperatorTool {
   render() {
     const { operator } = this.props;
-    const { isDragging, connectDragSource } = this.props;
+    const { connectDragSource } = this.props;
     const icon = {
       and: (
         <div className="OperatorTool-icon OperatorTool-icon--and">

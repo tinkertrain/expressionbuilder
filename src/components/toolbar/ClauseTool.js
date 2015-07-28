@@ -1,4 +1,3 @@
-import R from 'ramda';
 import { Map } from 'immutable';
 import React, { PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
@@ -18,11 +17,8 @@ let clauseToolSource = {
     }
     let dropResult = monitor.getDropResult();
     const canvas = dropResult.builder.get('canvas');
-    let generateId = R.compose(
-      R.add(1),
-      R.max
-    );
     let idList = canvas.map((exp) => exp.get('id')).toArray();
+
     dropResult.addExpression(Map({
       type: 'clause',
       facet: null,
@@ -32,7 +28,7 @@ let clauseToolSource = {
       side: dropResult.side,
       id: canvas.size === 0 ?
         0 :
-        generateId(idList)
+        Math.max(...idList) + 1
     }));
   }
 };
@@ -43,7 +39,7 @@ let clauseToolSource = {
 }))
 class ClauseTool {
   render() {
-    const { isDragging, connectDragSource } = this.props;
+    const { connectDragSource } = this.props;
 
     return connectDragSource(
       <div className="ClauseTool">Clause</div>
