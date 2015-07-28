@@ -20,10 +20,12 @@ export default class ContentsCaller extends Component {
     let facets;
 
     if (fuse.get('expression') !== 'incomplete') {
-      facets = fuse.get('expression')
-                .split(' ')
-                .filter((str) => str.indexOf(':') !== -1)
-                .map((str) => str.split(':')[0]);
+      facets = R.uniq(
+                fuse.get('expression')
+                  .split(' ')
+                  .filter((str) => str.indexOf(':') !== -1)
+                  .map((str) => str.split(':')[0])
+                );
     }
 
     return (
