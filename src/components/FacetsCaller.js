@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import Awesomplete from 'awesomplete';
+import Loading from './Loading';
 
 import pureRender from '../utils/pureRender';
 import { createFacetsQuery } from 'fuselink/queryAPI/queryParameters';
@@ -48,7 +49,16 @@ export default class FacetsCaller extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { fuse } = this.props;
+    if (nextProps.fuse !== fuse) {
+      this.setState({ loading: false });
+    }
+  }
+
   render() {
+    const { fuse } = this.props;
+
     return (
       <div className="Fuse-Response-Facets-Form">
         <form onSubmit={ this.callFacetsResponse }>
@@ -76,7 +86,9 @@ export default class FacetsCaller extends Component {
                   <label>{f}</label>
                   <input
                   type="number"
-                  ref={`limit_${f}`}/>
+                  ref={`limit_${f}`}
+                  onChange = { this.detectChange }
+                  />
                 </div>
               );
             }) :
@@ -94,6 +106,7 @@ export default class FacetsCaller extends Component {
                 <div key={`sort__${i}`}>
                   <label>{f}</label>
                   <select
+                  onChange = { this.detectChange }
                   ref={`sort__${f}`}>
                     <option value="freq">freq</option>
                     <option value="asc">asc</option>
@@ -106,16 +119,31 @@ export default class FacetsCaller extends Component {
           }
           <button
           type="submit"
+          disabled={this.state.loading && !fuse.get('facets')}
           className = { classNames({
             'FuseDial-Response-Facets-Caller': true
-          }) }>Get Facets</button>
+          }) }>
+            <span>Get Facets</span>
+            {
+              this.state.loading ? <Loading /> : null
+            }
+          </button>
+          {
+            this.state.sameQuery ? <p style={{
+              marginTop: '5px',
+              marginBottom: '0',
+              textAlign: 'right'
+            }}>Query was the same! Results below</p> : null
+          }
         </form>
       </div>
     );
   }
 
   state = {
-    typedFacets: []
+    typedFacets: [],
+    sameQuery: false,
+    loading: false
   }
 
   constructor() {
@@ -123,14 +151,25 @@ export default class FacetsCaller extends Component {
 
     this.checkReturnFacets = this.checkReturnFacets.bind(this);
     this.callFacetsResponse = this.callFacetsResponse.bind(this);
+    this.detectChange = this.detectChange.bind(this);
+  }
+
+  detectChange() {
+    this.setState({
+      sameQuery: false
+    });
   }
 
   checkReturnFacets() {
     let returnFacets = React.findDOMNode(this.refs.returnFacets).value;
+    let newFacets = R.filter((f) => !!f, R.split(',', returnFacets));
 
-    this.setState({
-      typedFacets: R.filter((f) => !!f, R.split(',', returnFacets))
-    });
+    if (this.state.typedFacets.join(',') !== newFacets.join(',')) {
+      this.setState({
+        sameQuery: false,
+        typedFacets: newFacets
+      });
+    }
   }
 
   callFacetsResponse(e) {
@@ -147,10 +186,10 @@ export default class FacetsCaller extends Component {
       facetQuery.facets(R.filter((f) => !!f, R.split(',', returnFacets)));
     }
     if (limitFacets.length) {
-      facetQuery.fLimit.apply(facetQuery, limitFacets);
+      facetQuery.fLimit(...limitFacets);
     }
     if (sortFacets.length) {
-      facetQuery.fSort.apply(facetQuery, sortFacets);
+      facetQuery.fSort(...sortFacets);
     }
 
     facetQuery.q(fuse.get('expression'));
@@ -161,6 +200,16 @@ export default class FacetsCaller extends Component {
       getFacets({
         url: `${fuse.get('endPoint')}${facetQuery.getURI()}`,
         queryObj: facetQueryObj
+      });
+
+      this.setState({
+        loading: true,
+        sameQuery: false
+      });
+    }
+    if (R.equals(facetQueryObj, facetsQParams)) {
+      this.setState({
+        sameQuery: true
       });
     }
   }

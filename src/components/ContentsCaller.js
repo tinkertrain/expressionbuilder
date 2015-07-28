@@ -2,11 +2,19 @@ import R from 'ramda';
 import { Map } from 'immutable';
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import Loading from './Loading';
 
 import pureRender from '../utils/pureRender';
 import { createContentsQuery } from 'fuselink/queryAPI/queryParameters';
 
 export default class ContentsCaller extends Component {
+  componentWillReceiveProps(nextProps) {
+    const { fuse } = this.props;
+    if (nextProps.fuse !== fuse) {
+      this.setState({ loading: false });
+    }
+  }
+
   render() {
     const { fuse } = this.props;
     let facets;
@@ -27,7 +35,8 @@ export default class ContentsCaller extends Component {
             <input
             type="number"
             id="limitContents"
-            ref="limitContents" />
+            ref="limitContents"
+            onChange = { this.detectChange } />
           </div>
 
           <div>
@@ -36,7 +45,8 @@ export default class ContentsCaller extends Component {
             <input
             type="number"
             id="offsetContents"
-            ref="offsetContents" />
+            ref="offsetContents"
+            onChange = { this.detectChange } />
           </div>
 
           <div>
@@ -45,7 +55,8 @@ export default class ContentsCaller extends Component {
             <input
             type="number"
             id="cutContents"
-            ref="cutContents" />
+            ref="cutContents"
+            onChange = { this.detectChange } />
           </div>
 
           <h5>Sort contents by</h5>
@@ -56,6 +67,7 @@ export default class ContentsCaller extends Component {
                 <div key={`sortby_${i}`}>
                   <label>{f}</label>
                   <select
+                  onChange = { this.detectChange }
                   ref={`sortby_${f}`}>
                     <option value="asc">asc</option>
                     <option value="desc">desc</option>
@@ -67,18 +79,43 @@ export default class ContentsCaller extends Component {
           }
           <button
           type="submit"
+          disabled={this.state.loading && !fuse.get('contents')}
           className = { classNames({
             'FuseDial-Response-Contents-Caller': true
-          }) }>Get Contents</button>
+          }) }>
+            <span>Get Contents</span>
+            {
+              this.state.loading ? <Loading /> : null
+            }
+          </button>
+          {
+            this.state.sameQuery ? <p style={{
+              marginTop: '5px',
+              marginBottom: '0',
+              textAlign: 'right'
+            }}>Query was the same! Results below</p> : null
+          }
         </form>
       </div>
     );
+  }
+
+  state = {
+    loading: false,
+    sameQuery: false
   }
 
   constructor() {
     super();
 
     this.callContentsResponse = this.callContentsResponse.bind(this);
+    this.detectChange = this.detectChange.bind(this);
+  }
+
+  detectChange() {
+    this.setState({
+      sameQuery: false
+    });
   }
 
   callContentsResponse(e) {
@@ -107,7 +144,7 @@ export default class ContentsCaller extends Component {
     }
 
     if (sortContents.length) {
-      contentsQuery.sortBy.apply(contentsQuery, sortContents);
+      contentsQuery.sortBy(...sortContents);
     }
 
     contentsQueryObj = contentsQuery.get();
@@ -116,6 +153,13 @@ export default class ContentsCaller extends Component {
       getContents({
         url: `${fuse.get('endPoint')}${contentsQuery.getURI()}`,
         queryObj: contentsQueryObj
+      });
+
+      this.setState({ loading: true });
+    }
+    if (R.equals(contentsQueryObj, contentsQParams)) {
+      this.setState({
+        sameQuery: true
       });
     }
   }

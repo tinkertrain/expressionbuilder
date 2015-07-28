@@ -13,11 +13,18 @@ class ItemsRenderer {
     const { items } = this.props;
 
     return (
-      <pre className="FuseDial-Items">
-        <code className="language-javascript" ref="items">
-          { JSON.stringify(items, null, 2) }
-        </code>
-      </pre>
+      <div className="Items">
+        {
+          items ?
+          (
+            <pre className="FuseDial-Items">
+              <code className="language-javascript" ref="items">
+                { JSON.stringify(items, null, 2) }
+              </code>
+            </pre>
+          ) : 'waiting'
+        }
+      </div>
     );
   }
 

@@ -18,7 +18,7 @@ class FuseDial {
           (
             <div>
               <div>
-                <h3>Configure the request</h3>
+                <h2>Configure the request</h2>
                 <FacetsCaller fuse = { fuse } getFacets = { getFacets }/>
                 <ContentsCaller fuse = { fuse } getContents = { getContents }/>
               </div>
