@@ -12,20 +12,15 @@ export default class FacetsCaller extends Component {
   componentDidMount() {
     const { fuse } = this.props;
     let facetList = fuse.get('facetList');
-    if (fuse.get('expression') !== 'incomplete') {
-      let exp = fuse.get('expression')
-                .split(' ')
-                .filter((str) => str.indexOf(':') !== -1)
-                .map((str) => str.split(':')[0]);
-      let cleanedFacetList = R.reject((facet) => R.contains(facet, exp), facetList);
 
+    if (fuse.get('expression') !== 'incomplete') {
       if (this.refs.returnFacets) {
         let input = React.findDOMNode(this.refs.returnFacets);
 
         if (facetList && facetList.length) {
           /* eslint-disable no-unused-vars */
           let awesomplete = new Awesomplete(input, {
-            list: cleanedFacetList,
+            list: facetList,
 
             filter(text, inp) {
               return Awesomplete.FILTER_CONTAINS(text, inp.match(/[^,]*$/)[0]);
