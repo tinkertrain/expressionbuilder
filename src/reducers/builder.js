@@ -1,4 +1,3 @@
-import R from 'ramda';
 import { Map, List } from 'immutable';
 import * as canvasUtils from '../utils/canvasUtils';
 import * as aT from '../constants/ActionTypes';
@@ -87,10 +86,6 @@ export default function builder(state = initialState, action) {
     });
 
     case aT.FILL_EMPTY:
-    let generateId = R.compose(
-      R.add(1),
-      R.max
-    );
     let idList = canvas.map((exp) => exp.get('id')).toArray();
     let clausesToAdd = [];
 
@@ -100,7 +95,7 @@ export default function builder(state = initialState, action) {
         let rightId;
 
         if (!exp.get('left')) {
-          leftId = generateId(idList);
+          leftId = Math.max(...idList) + 1;
           clausesToAdd.push(Map({
             type: 'clause',
             facet: null,
@@ -116,7 +111,7 @@ export default function builder(state = initialState, action) {
           leftId = exp.get('left');
         }
         if (!exp.get('right')) {
-          rightId = generateId(idList);
+          rightId = Math.max(...idList) + 1;
           clausesToAdd.push(Map({
             type: 'clause',
             facet: null,
