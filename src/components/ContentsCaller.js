@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Loading from './Loading';
 
 import pureRender from '../utils/pureRender';
-import { createContentsQuery } from 'fuselink/queryAPI/queryParameters';
+import { createContentsQuery } from '../fuselink/queryAPI/queryParameters';
 
 export default class ContentsCaller extends Component {
   componentWillReceiveProps(nextProps) {

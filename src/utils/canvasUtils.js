@@ -1,5 +1,5 @@
-import { clauseOperators } from 'fuselink/queryAPI';
-import { queryOperators } from 'fuselink/queryAPI';
+import { clauseOperators } from '../fuselink/queryAPI';
+import { queryOperators } from '../fuselink/queryAPI';
 
 export function isCanvasComplete(canvas) {
   let clauses = canvas
@@ -62,4 +62,3 @@ export function expressionsAreComplete(canvas) {
 
   return filteredExpressions.size === expressions.size;
 }
-

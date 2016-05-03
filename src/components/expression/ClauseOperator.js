@@ -10,8 +10,8 @@ class ClauseOperator extends Component {
       equalTo: '=',
       greaterThan: '>',
       greaterOrEqualTo: '>=',
-      lowerThan: '<',
-      lowerOrEqualTo: '<='
+      lessThan: '<',
+      lessOrEqualTo: '<='
     };
     let key = 1;
     let symbolList = R.values(
@@ -44,8 +44,8 @@ class ClauseOperator extends Component {
       ['=']: 'equalTo',
       ['>']: 'greaterThan',
       ['>=']: 'greaterOrEqualTo',
-      ['<']: 'lowerThan',
-      ['<=']: 'lowerOrEqualTo',
+      ['<']: 'lessThan',
+      ['<=']: 'lessOrEqualTo',
       ['!=']: 'not'
     };
 
